@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import FullExplore from "./pages/FullExplore";
+import InvestorOverview from "./pages/InvestorOverview";
 
 function App() {
   const action = useNavigationType();
@@ -46,6 +47,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<FullExplore />} />
+      <Route path="/over" element={<InvestorOverview />} />
     </Routes>
   );
 }
