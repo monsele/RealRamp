@@ -9,6 +9,7 @@ import FullExplore from "./pages/FullExplore";
 import InvestorOverview from "./pages/InvestorOverview";
 import PublishProperty from "./pages/PublishProperty";
 import AuctionScreen from "./pages/AuctionScreen";
+import BidScreen from "./pages/BidPage";
 
 function App() {
   const action = useNavigationType();
@@ -52,7 +53,9 @@ function App() {
       <Route path="/over" element={<InvestorOverview />} />
       <Route path="/publish" element={<PublishProperty />} />
       <Route path="/auction" element={<AuctionScreen />} />
+      <Route path="/bid" element={<BidScreen />} />
     </Routes>
+  
   );
 }
 export default App;
