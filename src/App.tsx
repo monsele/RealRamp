@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import FullExplore from "./pages/FullExplore";
 import InvestorOverview from "./pages/InvestorOverview";
+import PublishProperty from "./pages/PublishProperty";
+import AuctionScreen from "./pages/AuctionScreen";
 
 function App() {
   const action = useNavigationType();
@@ -48,6 +50,8 @@ function App() {
     <Routes>
       <Route path="/" element={<FullExplore />} />
       <Route path="/over" element={<InvestorOverview />} />
+      <Route path="/publish" element={<PublishProperty />} />
+      <Route path="/auction" element={<AuctionScreen />} />
     </Routes>
   );
 }
