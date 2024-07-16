@@ -11,6 +11,7 @@ import PublishProperty from "./pages/PublishProperty";
 import AuctionScreen from "./pages/AuctionScreen";
 import BidScreen from "./pages/BidPage";
 import OnchainProviders from "./OnchainProviders";
+import SaleFormForm from "./components/saleFrom";
 function App() {
   const action = useNavigationType();
   const location = useLocation();
@@ -55,6 +56,7 @@ function App() {
         <Route path="/publish" element={<PublishProperty />} />
         <Route path="/auction" element={<AuctionScreen />} />
         <Route path="/bid" element={<BidScreen />} />
+        <Route path="/sale" element={<SaleFormForm />} />
       </Routes>
     </OnchainProviders>
   );
