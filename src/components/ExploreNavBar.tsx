@@ -1,17 +1,32 @@
-import { FunctionComponent, useCallback } from "react";
-
-export type FrameComponent1Type = {
+import { FunctionComponent, useCallback,useEffect, useState } from "react";
+import {WalletComponents} from './Login'
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount} from "wagmi";
+import { log } from "console";
+export type ExploreNavBarType = {
   className?: string;
 };
 
-const FrameComponent1: FunctionComponent<FrameComponent1Type> = ({
+
+const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
   className = "",
 }) => {
   const onActionButtonsContainerClick = useCallback(() => {
     // Please sync "CONNECTED WALLET" to the project
   }, []);
+const { isConnected,address } = useAccount();
 
-  return (
+useEffect(() => {
+  if (isConnected) {
+    console.log(address);
+    return;
+  }
+ console.log("Nothing here ....!");
+ 
+}, [isConnected]);
+  
+
+return (
     <div
       className={`w-[1195px] flex flex-col items-start justify-start gap-[13px] top-[0] z-[99] sticky max-w-full text-left text-sm text-gray-500 font-outfit ${className}`}
     >
@@ -70,11 +85,12 @@ const FrameComponent1: FunctionComponent<FrameComponent1Type> = ({
                 List properties
               </a>
             </div>
-            <button className="cursor-pointer py-[7px] px-[18px] bg-ntblack w-[83px] rounded-11xl box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
+            <ConnectButton label="Login"/>
+            {/* <button className="cursor-pointer py-[7px] px-[18px] bg-ntblack w-[83px] rounded-11xl box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
               <a className="[text-decoration:none] relative text-base font-outfit text-white-base text-left inline-block min-w-[43px]">
                 Log in
               </a>
-            </button>
+            </button> */}
           </div>
         </div>
       </header>
@@ -106,4 +122,4 @@ const FrameComponent1: FunctionComponent<FrameComponent1Type> = ({
   );
 };
 
-export default FrameComponent1;
+export default ExploreNavBar;

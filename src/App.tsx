@@ -10,7 +10,7 @@ import InvestorOverview from "./pages/InvestorOverview";
 import PublishProperty from "./pages/PublishProperty";
 import AuctionScreen from "./pages/AuctionScreen";
 import BidScreen from "./pages/BidPage";
-
+import OnchainProviders from "./OnchainProviders";
 function App() {
   const action = useNavigationType();
   const location = useLocation();
@@ -48,14 +48,15 @@ function App() {
   }, [pathname]);
 
   return (
-    <Routes>
-      <Route path="/" element={<FullExplore />} />
-      <Route path="/over" element={<InvestorOverview />} />
-      <Route path="/publish" element={<PublishProperty />} />
-      <Route path="/auction" element={<AuctionScreen />} />
-      <Route path="/bid" element={<BidScreen />} />
-    </Routes>
-  
+    <OnchainProviders>
+      <Routes>
+        <Route path="/" element={<FullExplore />} />
+        <Route path="/over" element={<InvestorOverview />} />
+        <Route path="/publish" element={<PublishProperty />} />
+        <Route path="/auction" element={<AuctionScreen />} />
+        <Route path="/bid" element={<BidScreen />} />
+      </Routes>
+    </OnchainProviders>
   );
 }
 export default App;
