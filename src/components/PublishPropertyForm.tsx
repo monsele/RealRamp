@@ -1,9 +1,11 @@
 import { FormEvent, FunctionComponent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PropertyInput from "./PropertyInput";
 import {
   useReadContract,
   type UseReadContractParameters,
   useWriteContract,
+  useAccount,
 } from "wagmi";
 import { toBigInt } from "ethers";
 import { contractABI, contractAddress } from "../abi/EstatePool";
@@ -19,7 +21,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   const [propertyLocation, setPropertyLocation] = useState("");
   const [desc, setDesc] = useState("");
   const [totalUnits, settotalUnits] = useState("1000");
-  const [category, setCategory] = useState("Apartment");
+  const [category, setCategory] = useState("0");
 
   const result = useReadContract({
     abi: contractABI,
@@ -28,26 +30,31 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
     args: [toBigInt(1)],
   });
   const { writeContract } = useWriteContract();
-
+  const navigate = useNavigate();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Here you can access all the input values
-    console.log({
-      propertyTitle,
-      propertyLocation,
-      desc,
-      category,
-      // Add other input values here
-    });
-    // You can now send this data to your backend or smart contract
-    writeContract({
-      abi: contractABI,
-      address: contractAddress,
-      functionName: "CreateAsset",
-      args: [propertyTitle,toBigInt(totalUnits),toBigInt(Number(totalUnits)/2),1],
-    });
-    console.log(result);
-    console.log(result.data);
+    const { isConnected, address } = useAccount();
+    try {
+      if (!isConnected) {
+        return;
+      }
+      event.preventDefault();
+      // Here you can access all the input values
+      var check = writeContract({
+        abi: contractABI,
+        address: contractAddress,
+        functionName: "CreateAsset",
+        args: [
+          propertyTitle,
+          toBigInt(totalUnits),
+          toBigInt(Number(totalUnits) / 2),
+          Number(category),
+        ],
+      });
+      console.log(check);
+      navigate(`/overview/${address}`);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
   return (
     <form

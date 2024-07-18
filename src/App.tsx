@@ -51,7 +51,7 @@ function App() {
     <OnchainProviders>
       <Routes>
         <Route path="/" element={<FullExplore />} />
-        <Route path="/over" element={<InvestorOverview />} />
+        <Route path="/overview/:address" element={<InvestorOverview />} />
         <Route path="/publish" element={<PublishProperty />} />
         <Route path="/auction" element={<AuctionScreen />} />
         <Route path="/bid" element={<BidScreen />} />
