@@ -1,5 +1,12 @@
-import { FunctionComponent, useState } from "react";
+import { FormEvent, FunctionComponent, useState } from "react";
 import PropertyInput from "./PropertyInput";
+import {
+  useReadContract,
+  type UseReadContractParameters,
+  useWriteContract,
+} from "wagmi";
+import { toBigInt } from "ethers";
+import { contractABI, contractAddress } from "../abi/EstatePool";
 
 export type PublishPropertyFormType = {
   className?: string;
@@ -10,8 +17,41 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
 }) => {
   const [propertyTitle, setPropertyTitle] = useState("");
   const [propertyLocation, setPropertyLocation] = useState("");
+  const [desc, setDesc] = useState("");
+  const [totalUnits, settotalUnits] = useState("1000");
+  const [category, setCategory] = useState("Apartment");
+
+  const result = useReadContract({
+    abi: contractABI,
+    address: contractAddress,
+    functionName: "availaibleTokenAmount",
+    args: [toBigInt(1)],
+  });
+  const { writeContract } = useWriteContract();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Here you can access all the input values
+    console.log({
+      propertyTitle,
+      propertyLocation,
+      desc,
+      category,
+      // Add other input values here
+    });
+    // You can now send this data to your backend or smart contract
+    writeContract({
+      abi: contractABI,
+      address: contractAddress,
+      functionName: "CreateAsset",
+      args: [propertyTitle,toBigInt(totalUnits),toBigInt(Number(totalUnits)/2),1],
+    });
+    console.log(result);
+    console.log(result.data);
+  };
   return (
-    <div
+    <form
+      onSubmit={handleSubmit}
       className={`self-stretch flex flex-row items-start justify-start gap-[36px] max-w-full text-center text-5xl text-black font-outfit mq750:gap-[18px] mq1225:flex-wrap ${className}`}
     >
       <div className="flex-1 flex flex-col items-start justify-start gap-[19px] min-w-[391px] max-w-full mq1050:min-w-full">
@@ -98,16 +138,16 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
             </div>
           </div>
           <PropertyInput
-            propertyTitle="Property Location"
-            inputTextFieldPlaceholder="Enter your property location here "
-            value={propertyLocation}
+            propertyTitle="Property Title"
+            inputTextFieldPlaceholder="Enter your property Title here "
+            value={propertyTitle}
             onChange={(e) => setPropertyTitle(e.target.value)}
           />
           <PropertyInput
             propertyTitle="Property Location"
             inputTextFieldPlaceholder="Enter your property location here "
             value={propertyLocation}
-            onChange={(e) => setPropertyTitle(e.target.value)}
+            onChange={(e) => setPropertyLocation(e.target.value)}
           />
           <div className="self-stretch flex flex-row items-start justify-start gap-[10px] mq450:flex-wrap">
             <div className="flex-1 flex flex-col items-start justify-start gap-[10px] min-w-[129px]">
@@ -115,17 +155,23 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                 <div className="self-stretch relative font-medium">
                   Property category
                 </div>
-                <div className="self-stretch h-[65px] flex flex-col items-start justify-start relative gap-[10px] text-xs text-gray-200">
-                  <div className="w-[198px] h-[65px] rounded-3xs bg-dimgray box-border flex flex-row items-center justify-start py-[25px] px-[15px] border-[1px] border-solid border-whitesmoke-200">
-                    <div className="h-[15px] w-[61px] relative tracking-[0.01em] flex items-center">
-                      Apartment
-                    </div>
+                <div className="self-stretch h-[65px] flex flex-col items-start justify-start relative text-xs text-gray-200">
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full h-[65px] rounded-3xs bg-dimgray text-yellow-300 font-medium box-border flex items-center py-[25px] px-[15px] border-[1px] border-solid border-whitesmoke-200 appearance-none cursor-pointer"
+                    style={{ fontFamily: "inherit" }}
+                  >
+                    <option value="1">Apartment</option>
+                    <option value="2">Houses</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-200">
+                    <img
+                      className="w-6 h-6"
+                      alt="Dropdown arrow"
+                      src="/vuesaxlineararrowdown.svg"
+                    />
                   </div>
-                  <img
-                    className="w-6 h-6 absolute !m-[0] top-[17px] left-[124px] z-[1]"
-                    alt=""
-                    src="/vuesaxlineararrowdown.svg"
-                  />
                 </div>
               </div>
               <div className="relative font-medium inline-block min-w-[67px]">
@@ -137,6 +183,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                   defaultValue="100"
                   className="w-full bg-transparent border-none outline-none text-xs text-yellow-300 font-medium tracking-[0.01em] min-w-[21px]"
                   style={{ fontFamily: "inherit" }}
+                  onChange={(e) => settotalUnits(e.target.value)}
                 />
               </div>
             </div>
@@ -148,7 +195,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                     <input
                       type="text"
                       defaultValue="20"
-                      className="w-full bg-transparent border-none outline-none text-xs text-white font-medium tracking-[0.01em] min-w-[15px]"
+                      className="w-full bg-transparent border-none outline-none text-xs text-yellow-300 font-medium tracking-[0.01em] min-w-[15px]"
                       style={{ fontFamily: "inherit" }}
                     />
                   </div>
@@ -164,9 +211,12 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                 </div>
                 <div className="self-stretch flex flex-row items-start justify-start relative text-xs text-gray-200">
                   <div className="flex-1 rounded-3xs bg-dimgray flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
-                    <div className="relative tracking-[0.01em] inline-block min-w-[31px]">
-                      2000
-                    </div>
+                    <input
+                      type="text"
+                      defaultValue="2000"
+                      className="w-full bg-transparent border-none outline-none text-xs text-blue-300 font-medium tracking-[0.01em] min-w-[15px]"
+                      style={{ fontFamily: "inherit" }}
+                    />
                   </div>
                   <div className="h-[41px] w-px absolute !m-[0] top-[11px] right-[83px] box-border z-[1] border-r-[1px] border-solid border-darkslategray-300" />
                   <div className="absolute !m-[0] top-[21px] right-[9px] text-base tracking-[0.01em] text-darkslategray-300 inline-block min-w-[43px] z-[1]">
@@ -181,9 +231,11 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
               <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
                 <div className="relative font-medium">Property Description</div>
                 <textarea
-                  className="bg-dimgray h-[122px] w-auto [outline:none] self-stretch rounded-3xs box-border flex flex-row items-start justify-start py-4 px-[15px] font-outfit text-xs text-darkgray border-[1px] border-solid border-whitesmoke-200"
+                  className="bg-dimgray h-[122px] w-auto [outline:none] self-stretch rounded-3xs box-border flex flex-row items-start justify-start py-4 px-[15px] font-outfit text-xs text-yellow-300 border-[1px] border-solid border-whitesmoke-200"
                   placeholder="Give a brief description of the property"
                   rows={6}
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
                   cols={20}
                 />
               </div>
@@ -201,7 +253,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

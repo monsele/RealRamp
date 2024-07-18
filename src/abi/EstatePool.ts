@@ -1,5 +1,4 @@
-export const contractABI = [
-  // Your contract ABI here
+export const contractABI = 
   [
     {
       inputs: [
@@ -974,7 +973,6 @@ export const contractABI = [
       stateMutability: "view",
       type: "function",
     },
-  ],
-];
+  ] as const;
 
 export const contractAddress = "0x796fa16c03112F665dd895b4b2023de0aFe4cdb8"; // Your contract address here
