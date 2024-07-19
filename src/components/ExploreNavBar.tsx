@@ -3,7 +3,7 @@ import {WalletComponents} from './Login'
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount} from "wagmi";
 import {Link} from 'react-router-dom'
-import { log } from "console";
+import toast, { Toaster } from "react-hot-toast";
 export type ExploreNavBarType = {
   className?: string;
 };
@@ -19,6 +19,7 @@ const { isConnected,address } = useAccount();
 
 useEffect(() => {
   if (isConnected) {
+    toast("User Connected")
     console.log(address);
     return;
   }
@@ -31,6 +32,7 @@ return (
   <div
     className={`w-[1195px] flex flex-col items-start justify-start gap-[13px] top-[0] z-[99] sticky max-w-full text-left text-sm text-gray-500 font-outfit ${className}`}
   >
+    <Toaster/>
     <header className="self-stretch shadow-[2px_4px_30px_#e9eefd] rounded-42xl bg-white-base flex flex-row items-start justify-between p-3 box-border max-w-full gap-[20px] text-left text-5xl text-ntblack font-outfit">
       <div className="w-[297px] flex flex-col items-start justify-start pt-[3px] px-0 pb-0 box-border">
         <div className="self-stretch flex flex-row items-start justify-start py-0 px-4 gap-[42px] mq450:gap-[21px]">

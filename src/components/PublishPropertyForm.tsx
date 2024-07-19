@@ -169,8 +169,10 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                     className="w-full h-[65px] rounded-3xs bg-dimgray text-yellow-300 font-medium box-border flex items-center py-[25px] px-[15px] border-[1px] border-solid border-whitesmoke-200 appearance-none cursor-pointer"
                     style={{ fontFamily: "inherit" }}
                   >
-                    <option value="1">Apartment</option>
-                    <option value="2">Houses</option>
+                    <option value="0">Land</option>
+                    <option value="1">Houses</option>
+                    <option value="2">Commercial</option>
+                    <option value="3">Apartment</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-200">
                     <img

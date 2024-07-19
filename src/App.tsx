@@ -11,6 +11,7 @@ import PublishProperty from "./pages/PublishProperty";
 import AuctionScreen from "./pages/AuctionScreen";
 import BidScreen from "./pages/BidPage";
 import OnchainProviders from "./OnchainProviders";
+import MyPropertiesPage from "./pages/MyPropertiesPage";
 function App() {
   const action = useNavigationType();
   const location = useLocation();
@@ -55,7 +56,7 @@ function App() {
         <Route path="/publish" element={<PublishProperty />} />
         <Route path="/auction" element={<AuctionScreen />} />
         <Route path="/bid" element={<BidScreen />} />
-
+        <Route path="/properties" element={<MyPropertiesPage />} />
       </Routes>
     </OnchainProviders>
   );
