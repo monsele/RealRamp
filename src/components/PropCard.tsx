@@ -2,11 +2,12 @@ import { FunctionComponent } from "react";
 
 export type PropCardType = {
   className?: string;
+  title: string;
+  LocationAddress: string;
+  Price: string;
+  Yield: string;
 };
-
-const PropCard: FunctionComponent<PropCardType> = ({
-  className = "",
-}) => {
+const PropCard: FunctionComponent<PropCardType> = ({ className = "", title,Yield,LocationAddress,Price }) => {
   return (
     <div
       className={`shadow-[2px_4px_30px_#e9eefd] rounded-3xs bg-white-base flex flex-col items-start justify-start gap-[16px] text-left text-base text-ntblack font-outfit ${className}`}
@@ -32,18 +33,18 @@ const PropCard: FunctionComponent<PropCardType> = ({
       <div className="self-stretch flex flex-col items-start justify-start py-0 px-[18px] gap-[15px]">
         <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
           <div className="self-stretch relative font-semibold">
-            Lekki Court Yard
+            {title}
           </div>
           <div className="self-stretch relative text-sm text-gray-700">
-            Island , Lagos Nigeris
+            {LocationAddress}
           </div>
         </div>
         <div className="self-stretch h-5 flex flex-row items-start justify-start gap-[19.8px]">
-          <div className="flex-1 relative font-medium">50,000 USDT</div>
+          <div className="flex-1 relative font-medium">{Price}</div>
           <div className="h-[20.5px] w-[0.5px] relative box-border border-r-[0.5px] border-solid border-gray-800" />
           <div className="flex-1 flex flex-col items-start justify-start pt-px px-0 pb-0 text-sm">
             <div className="self-stretch relative font-medium">
-              20 % Annual yield
+              {Yield} Annual yield
             </div>
           </div>
         </div>

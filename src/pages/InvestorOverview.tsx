@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
-import FrameComponent from "../components/InvestorSidebar";
-import Content from "../components/ActivityOverview";
+import InvestorSideBar from "../components/InvestorSidebar";
+import ActivityOverview from "../components/ActivityOverview";
 
 const InvestorOverview: FunctionComponent = () => {
   return (
@@ -20,9 +20,9 @@ const InvestorOverview: FunctionComponent = () => {
               </a>
             </div>
           </div>
-          <FrameComponent />
+          <InvestorSideBar />
         </div>
-        <Content />
+        <ActivityOverview />
       </footer>
       <div className="w-[333px] flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <img

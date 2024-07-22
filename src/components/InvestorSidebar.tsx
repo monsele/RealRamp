@@ -1,5 +1,5 @@
 import { FunctionComponent, useCallback } from "react";
-
+import { Link } from "react-router-dom";
 export type FrameComponentType = {
   className?: string;
 };
@@ -59,9 +59,12 @@ const InvestorSidebar: FunctionComponent<FrameComponentType> = ({
             alt=""
             src="/vuesaxlinearcategory2.svg"
           />
-          <div className="relative inline-block min-w-[112px]">
+          <Link
+            to={"/properties"}
+            className="relative inline-block min-w-[112px]"
+          >
             My Properties
-          </div>
+          </Link>
         </div>
         <div className="self-stretch flex flex-row items-start justify-start py-[18px] px-6 gap-[10px]">
           <img

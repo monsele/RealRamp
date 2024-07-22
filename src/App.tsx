@@ -12,6 +12,9 @@ import AuctionScreen from "./pages/AuctionScreen";
 import BidScreen from "./pages/BidPage";
 import OnchainProviders from "./OnchainProviders";
 import MyPropertiesPage from "./pages/MyPropertiesPage";
+import BuyPlots from "./pages/BuyPlots";
+import ConnectPage from "./pages/ConnectPage";
+
 function App() {
   const action = useNavigationType();
   const location = useLocation();
@@ -57,6 +60,8 @@ function App() {
         <Route path="/auction" element={<AuctionScreen />} />
         <Route path="/bid" element={<BidScreen />} />
         <Route path="/properties" element={<MyPropertiesPage />} />
+        <Route path="/buyPlot/:tokenId" element={<BuyPlots />} />
+        <Route path="/connect" element={<ConnectPage />} />
       </Routes>
     </OnchainProviders>
   );

@@ -1,13 +1,28 @@
-import { FunctionComponent, useCallback } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import OverviewSidebar from "../components/OverviewSidebar";
 import TabCard from "../components/TabCard";
 import PropCard from "../components/PropCard";
-
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useAccount } from "wagmi";
+import {PropertyType} from "../utils/interfaces/interfaces"
 const PropertyManagersProps: FunctionComponent = () => {
+  
   const onListButtonClick = useCallback(() => {
     // Please sync "Publish Property" to the project
   }, []);
-
+  //const [properties, setproperties] = useState<Data[] | undefined>(undefined);
+  const { address } = useAccount();
+  const { data } = useQuery({
+    queryKey: ["fore"],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `https://localhost:7280/PropertiesByOwner/${address}`
+      );
+      return data as PropertyType[];
+    },
+  });
+  console.log(data);
   return (
     <div className="w-full h-[1183px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start gap-[325px] leading-[normal] tracking-[normal] text-left text-5xl font-outfit lg:h-auto lg:gap-[162px] mq450:gap-[41px] mq750:gap-[81px]">
       <main className="w-[1382px] flex flex-row flex-wrap items-start justify-start py-0 pr-5 pl-0 box-border gap-[45px] shrink-0 max-w-full text-left text-5xl font-outfit mq750:gap-[22px]">
@@ -214,19 +229,19 @@ const PropertyManagersProps: FunctionComponent = () => {
                   </div>
                 </div>
               </div>
+
               <div className="self-stretch flex flex-row items-start justify-end py-0 px-2.5 box-border max-w-full">
                 <div className="flex-1 grid flex-row items-start justify-start gap-[12px] max-w-full grid-cols-[repeat(3,_minmax(236px,_1fr))] mq450:grid-cols-[minmax(236px,_1fr)] mq750:justify-center mq750:grid-cols-[repeat(2,_minmax(236px,_409px))]">
-                  <PropCard />
-                  <PropCard />
-                  <PropCard />
+                  {data?.map((item, index) => (
+                    <PropCard
+                      key={index}
+                      title={item.propertyTitle}
+                      LocationAddress={item.propertyLocation}
+                      Price={item.price.toString() + " naira_x"}
+                      Yield={item.annualYield + " %"}
+                    />
+                  ))}
                 </div>
-              </div>
-            </div>
-            <div className="self-stretch flex flex-row items-start justify-start py-0 px-2.5 box-border max-w-full">
-              <div className="flex-1 grid flex-row items-start justify-start gap-[12px] max-w-full grid-cols-[repeat(3,_minmax(236px,_1fr))] mq450:grid-cols-[minmax(236px,_1fr)] mq750:justify-center mq750:grid-cols-[repeat(2,_minmax(236px,_409px))]">
-                <PropCard />
-                <PropCard />
-                <PropCard />
               </div>
             </div>
           </div>

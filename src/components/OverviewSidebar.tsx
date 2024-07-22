@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
-
+import { Link } from "react-router-dom";
+import {useAccount} from 'wagmi'
 export type OverviewSidebarType = {
   className?: string;
 };
@@ -7,7 +8,9 @@ export type OverviewSidebarType = {
 const OverviewSidebar: FunctionComponent<OverviewSidebarType> = ({
   className = "",
 }) => {
+  const {address, isConnected} = useAccount();
   return (
+    
     <div
       className={`self-stretch flex flex-col items-end justify-start gap-[25px] text-left text-9xl text-black font-outfit ${className}`}
     >
@@ -42,9 +45,12 @@ const OverviewSidebar: FunctionComponent<OverviewSidebarType> = ({
             alt=""
             src="/vuesaxlinearhome2.svg"
           />
-          <a className="[text-decoration:none] relative text-[inherit] inline-block min-w-[77px]">
+          <Link
+            to={`/overview/${address!==undefined ? address: "Not-con"}`}
+            className="[text-decoration:none] relative text-[inherit] inline-block min-w-[77px]"
+          >
             Overview
-          </a>
+          </Link>
         </div>
         <button className="cursor-pointer py-3.5 px-6 bg-ntblack self-stretch rounded-3xs flex flex-row items-start justify-start gap-[10px] whitespace-nowrap border-[3px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[3px] hover:border-solid hover:border-skyblue-100">
           <img

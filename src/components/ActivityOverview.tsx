@@ -13,16 +13,16 @@ type Data = {
 
 
 const ActivityOverview: FunctionComponent<ContentType> = ({ className = "" }) => {
-const {data} = useQuery({
-  queryKey:["fore"],
-  queryFn: async () => {
-    const { data } = await axios.get("https://localhost:7280/weatherforecast");
-    return data as Data[];
-  }, 
-});
+// const {data} = useQuery({
+//   queryKey:["fore"],
+//   queryFn: async () => {
+//     const { data } = await axios.get("https://localhost:7280/weatherforecast");
+//     return data as Data[];
+//   }, 
+// });
 
 
-console.log(data);
+// console.log(data);
   return (
     <section
       className={`flex-1 flex flex-col items-start justify-start pt-[39px] px-0 pb-0 box-border min-w-[641px] max-w-full text-left text-5xl text-ntblack font-outfit mq450:min-w-full ${className}`}

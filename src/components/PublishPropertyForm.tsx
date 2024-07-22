@@ -29,6 +29,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
     functionName: "availaibleTokenAmount",
     args: [toBigInt(1)],
   });
+  console.log(result.data);
   const { writeContract } = useWriteContract();
   const navigate = useNavigate();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -39,18 +40,18 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
       }
       event.preventDefault();
       // Here you can access all the input values
-      var check = writeContract({
-        abi: contractABI,
-        address: contractAddress,
-        functionName: "CreateAsset",
-        args: [
-          propertyTitle,
-          toBigInt(totalUnits),
-          toBigInt(Number(totalUnits) / 2),
-          Number(category),
-        ],
-      });
-      console.log(check);
+      // var check = writeContract({
+      //   abi: contractABI,
+      //   address: contractAddress,
+      //   functionName: "CreateAsset",
+      //   args: [
+      //     propertyTitle,
+      //     toBigInt(totalUnits),
+      //     toBigInt(Number(totalUnits) / 2),
+      //     Number(category),
+      //   ],
+      // });
+      
       navigate(`/overview/${address}`);
     } catch (error) {
       console.error("Error submitting form:", error);
