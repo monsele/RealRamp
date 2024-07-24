@@ -1,4 +1,4 @@
-import { FormEvent, FunctionComponent, useState } from "react";
+import { FormEvent, FunctionComponent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropertyInput from "./PropertyInput";
 import {
@@ -9,7 +9,7 @@ import {
 } from "wagmi";
 import { toBigInt } from "ethers";
 import { contractABI, contractAddress } from "../abi/EstatePool";
-
+import toast, {Toaster} from "react-hot-toast";
 export type PublishPropertyFormType = {
   className?: string;
 };
@@ -23,45 +23,63 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   const [totalUnits, settotalUnits] = useState("1000");
   const [category, setCategory] = useState("0");
 
-  const result = useReadContract({
-    abi: contractABI,
-    address: contractAddress,
-    functionName: "availaibleTokenAmount",
-    args: [toBigInt(1)],
-  });
-  console.log(result.data);
   const { writeContract } = useWriteContract();
   const navigate = useNavigate();
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    const { isConnected, address } = useAccount();
-    try {
-      if (!isConnected) {
+  const { isConnected, address } = useAccount();
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault(); // Prevent default form submission
+
+      if (!isConnected || !address) {
+        toast("Wallet not connected");
+        console.error("Wallet not connected");
         return;
       }
-      event.preventDefault();
-      // Here you can access all the input values
-      // var check = writeContract({
-      //   abi: contractABI,
-      //   address: contractAddress,
-      //   functionName: "CreateAsset",
-      //   args: [
-      //     propertyTitle,
-      //     toBigInt(totalUnits),
-      //     toBigInt(Number(totalUnits) / 2),
-      //     Number(category),
-      //   ],
-      // });
-      
-      navigate(`/overview/${address}`);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
+
+      try {
+        console.log("Connected address:", address);
+
+        // Call the smart contract function
+        writeContract({
+          address: contractAddress,
+          abi: contractABI,
+          functionName: "CreateAsset", 
+          args: [
+            propertyTitle,
+            toBigInt(totalUnits),
+            toBigInt(Number(totalUnits) / 2),
+            Number(category)
+          ],
+        });
+
+        console.log("Property submission initiated");
+
+        // Optionally, navigate to a new page or show a success message
+        // navigate('/submission-success');
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        // Optionally, show an error message to the user
+      }
+    },
+    [
+      isConnected,
+      address,
+      propertyTitle,
+      propertyLocation,
+      desc,
+      totalUnits,
+      category,
+      writeContract,
+      navigate,
+    ]
+  );
+
   return (
     <form
       onSubmit={handleSubmit}
       className={`self-stretch flex flex-row items-start justify-start gap-[36px] max-w-full text-center text-5xl text-black font-outfit mq750:gap-[18px] mq1225:flex-wrap ${className}`}
     >
+      <Toaster />
       <div className="flex-1 flex flex-col items-start justify-start gap-[19px] min-w-[391px] max-w-full mq1050:min-w-full">
         <h2 className="m-0 relative text-inherit font-medium font-inherit mq450:text-lgi">
           Images of Properties
@@ -255,11 +273,11 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
             <button className="cursor-pointer py-[7px] px-[18px] bg-[transparent] flex-1 rounded-11xl [background:linear-gradient(180deg,_rgba(58,_150,_173,_0.12),_rgba(90,_130,_252,_0.12))] flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-black hover:bg-darkslategray-500 hover:box-border hover:border-[2px] hover:border-solid hover:border-darkslategray-200">
               <div className="relative text-sm font-medium font-outfit text-gray-700 text-left inline-block min-w-[98px]">{`Save & sell later`}</div>
             </button>
-            <button className="cursor-pointer py-[7px] px-[18px] bg-ntblack flex-1 rounded-11xl flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
-              <div className="relative text-base font-outfit text-white-base text-left inline-block min-w-[107px]">
+            <div className="cursor-pointer py-[7px] px-[18px] bg-ntblack flex-1 rounded-11xl flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
+              <button className="relative text-base font-outfit text-white-base text-left inline-block min-w-[107px]">
                 Publish for sale
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
         </div>
       </div>

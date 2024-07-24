@@ -1,9 +1,63 @@
-import { FunctionComponent } from "react";
+import { FormEvent, FunctionComponent, useCallback } from "react";
 import ExploreNavBar from "../components/ExploreNavBar";
+import { contractABI, contractAddress } from "../abi/EstatePool";
+import { useNavigate, useParams } from "react-router-dom";
+import { useReadContract, useWriteContract, useAccount } from "wagmi";
+import { parseEther, toBigInt } from "ethers";
 
 const BuyPlots: FunctionComponent = () => {
+  const { tokenId } = useParams<string>();
+  const result = useReadContract({
+    abi: contractABI,
+    address: contractAddress,
+    functionName: "availaibleTokenAmount",
+    args: [toBigInt(Number(tokenId))],
+  });
+  const { isConnected } = useAccount();
+  const { writeContract, data } = useWriteContract();
+  const navigate = useNavigate();
+
+  const handleSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      console.log("Submit button clicked");
+
+      if (!isConnected) {
+        console.error("Wallet not connected");
+        return;
+      }
+
+      if (!writeContract) {
+        console.error("writeContract is not available");
+        return;
+      }
+
+      try {
+        console.log("Attempting to write contract");
+        setTimeout(() => {
+          writeContract({
+            address: contractAddress,
+            abi: contractABI,
+            functionName: "BuyPlot",
+            args: [toBigInt(3), toBigInt(50), parseEther("0.01")],
+            value: parseEther("0.01"),
+          });
+          console.log("Write contract call initiated after delay");
+        }, 100);
+        console.log("Write contract call initiated");
+        navigate(``)
+      } catch (error) {
+        console.error("Error in writeContract:", error);
+      }
+    },
+    [writeContract, isConnected]
+  );
+
   return (
-    <div className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[175px] box-border gap-[659px] leading-[normal] tracking-[normal] mq800:gap-[329px] mq800:pl-[74px] mq800:pr-[74px] mq800:box-border mq450:gap-[165px] mq450:pl-5 mq450:pr-5 mq450:box-border mq1350:h-auto">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[175px] box-border gap-[659px] leading-[normal] tracking-[normal] mq800:gap-[329px] mq800:pl-[74px] mq800:pr-[74px] mq800:box-border mq450:gap-[165px] mq450:pl-5 mq450:pr-5 mq450:box-border mq1350:h-auto"
+    >
       <main className="self-stretch flex flex-row items-start justify-start py-0 pr-7 pl-[30px] box-border max-w-full shrink-0">
         <section className="flex-1 flex flex-col items-start justify-start gap-[23px] shrink-0 max-w-full text-left text-lg text-black font-outfit">
           <ExploreNavBar />
@@ -174,7 +228,7 @@ const BuyPlots: FunctionComponent = () => {
                       Units
                     </div>
                     <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 text-black mq450:text-lgi mq450:leading-[32px]">
-                      500
+                      {result.data?.toString()}
                     </div>
                   </div>
                   <div className="flex flex-col items-start justify-start pt-[8.5px] px-0 pb-0">
@@ -211,15 +265,19 @@ const BuyPlots: FunctionComponent = () => {
                   </div>
                   <div className="self-stretch flex flex-row items-start justify-start gap-[10px] text-xs text-gray-200 mq450:flex-wrap">
                     <div className="w-32 rounded-3xs bg-dimgray-200 box-border flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
-                      <div className="relative tracking-[0.01em] inline-block min-w-[21px] text-black">
-                        100
-                      </div>
+                      <input
+                        type="text"
+                        defaultValue="100"
+                        className="w-full bg-transparent border-none outline-none text-black text-xs tracking-[0.01em]"
+                      />
                     </div>
                     <div className="flex-1 flex flex-row items-start justify-start relative min-w-[172px]">
                       <div className="flex-1 rounded-3xs bg-dimgray-200 flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
-                        <div className="relative tracking-[0.01em] inline-block min-w-[31px] text-black">
-                          2000
-                        </div>
+                        <input
+                          type="text"
+                          defaultValue="2000"
+                          className="w-full bg-transparent border-none outline-none text-black text-xs tracking-[0.01em]"
+                        />
                       </div>
                       <div className="h-[41px] w-px absolute !m-[0] top-[11px] right-[121px] box-border z-[1] border-r-[1px] border-solid border-darkslategray-200" />
                       <div className="absolute !m-[0] top-[21px] right-[47px] text-base tracking-[0.01em] text-darkslategray-200 inline-block min-w-[43px] z-[1]">
@@ -228,10 +286,13 @@ const BuyPlots: FunctionComponent = () => {
                     </div>
                   </div>
                 </div>
-                <button className="cursor-pointer py-2.5 px-5 bg-ntblack self-stretch rounded-11xl flex flex-row items-start justify-center whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
-                  <div className="relative text-base font-outfit text-white-base text-left inline-block min-w-[63px]">
+                <button
+                  type="submit"
+                  className="cursor-pointer py-2.5 px-5 bg-ntblack self-stretch rounded-11xl flex flex-row items-start justify-center whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue"
+                >
+                  <span className="relative text-base font-outfit text-white-base text-left inline-block min-w-[63px]">
                     Pay Now
-                  </div>
+                  </span>
                 </button>
               </div>
             </div>
@@ -243,7 +304,7 @@ const BuyPlots: FunctionComponent = () => {
         alt=""
         src="/group-1000002260.svg"
       />
-    </div>
+    </form>
   );
 };
 

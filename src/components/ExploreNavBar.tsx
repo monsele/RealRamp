@@ -96,7 +96,7 @@ const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
           </div>
         </div>
       </header>
-      <div className="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
+      {/* <div className="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <div className="w-[515px] flex flex-row items-start justify-between gap-[20px] max-w-full mq450:hidden">
           <div className="rounded-11xl flex flex-row items-start justify-start py-2.5 px-5">
             <a className="[text-decoration:none] relative font-medium text-[inherit] inline-block min-w-[38px]">
@@ -119,7 +119,7 @@ const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
             </a>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

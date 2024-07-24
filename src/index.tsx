@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { base } from "viem/chains";
-import { OnchainKitProvider } from "@coinbase/onchainkit";
+import Providers from "./OnchainProviders";
 import { BrowserRouter } from "react-router-dom";
 import "./global.css";
 
@@ -11,14 +11,11 @@ const container = document.getElementById("root");
 const root = createRoot(container!);
 
 root.render(
-  <OnchainKitProvider
-    chain={base}
-    apiKey={process.env.PUBLIC_ONCHAINKIT_API_KEY}
-  >
+  <Providers>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </OnchainKitProvider>
+  </Providers>
 );
 
 // If you want to start measuring performance in your app, pass a function

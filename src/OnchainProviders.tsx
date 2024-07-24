@@ -34,7 +34,7 @@ const wallets = [
 const wagmiConfig = getDefaultConfig({
   appName: "onchainkit",
   wallets,
-  projectId: "626fe63a-376e-4e52-bf81-52f34f6fc403",
+  projectId: "1b8a76a4b6f972f3465c27dc3bb483cd",
   chains: [baseSepolia],
   ssr: false, // If your dApp uses server side rendering (SSR)
 });

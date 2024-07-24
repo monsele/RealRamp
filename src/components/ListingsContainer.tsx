@@ -38,6 +38,7 @@ const ListingsContainer: FunctionComponent<ListingsContainerType> = ({
     >
       {data?.map((item, index) => (
         <ExploreCard
+          key={index}
           propertyTitle={item.propertyTitle}
           plots="100"
           price={item.price}
