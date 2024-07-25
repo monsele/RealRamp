@@ -51,14 +51,9 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
             Number(category)
           ],
         });
-
         console.log("Property submission initiated");
-
-        // Optionally, navigate to a new page or show a success message
-        // navigate('/submission-success');
       } catch (error) {
         console.error("Error submitting form:", error);
-        // Optionally, show an error message to the user
       }
     },
     [

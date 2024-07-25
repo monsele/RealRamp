@@ -1,8 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import ExploreCard from "./ExploreCard";
 import { useQuery } from "@tanstack/react-query";
-import {useReadContract} from 'wagmi'
-import { contractABI, contractAddress } from "../abi/EstatePool";
 import axios from 'axios'
 import { PropertyType } from "../utils/interfaces/interfaces";
 export type ListingsContainerType = {

@@ -1,20 +1,35 @@
-import { FormEvent, FunctionComponent, useCallback } from "react";
+import { FormEvent, FunctionComponent, useCallback, useState } from "react";
 import ExploreNavBar from "../components/ExploreNavBar";
 import { contractABI, contractAddress } from "../abi/EstatePool";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReadContract, useWriteContract, useAccount } from "wagmi";
-import { parseEther, toBigInt } from "ethers";
-
+import { parseEther, toBigInt, parseUnits } from "ethers";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { PropertyType } from "../utils/interfaces/interfaces";
 const BuyPlots: FunctionComponent = () => {
+  const [plotAmount, setplotAmount] = useState(0);
+  const [priceSize, setPriceSize] = useState(0);
+  const [price, setprice] = useState(0)
   const { tokenId } = useParams<string>();
+  const { data } = useQuery({
+    queryKey: ["getPropertyBySmartId"],
+    queryFn: async () => {
+      const { data } = await axios.get(`https://localhost:7280/getbysmartId/${tokenId}`);
+      setprice(data.price);
+      return data as PropertyType;
+    },
+  });
+
+  console.log(data);
   const result = useReadContract({
     abi: contractABI,
     address: contractAddress,
     functionName: "availaibleTokenAmount",
     args: [toBigInt(Number(tokenId))],
   });
-  const { isConnected } = useAccount();
-  const { writeContract, data } = useWriteContract();
+  const { isConnected, address } = useAccount();
+  const { writeContract, data:hash } = useWriteContract();
   const navigate = useNavigate();
 
   const handleSubmit = useCallback(
@@ -34,23 +49,28 @@ const BuyPlots: FunctionComponent = () => {
 
       try {
         console.log("Attempting to write contract");
-        setTimeout(() => {
+       console.log(plotAmount*price);
+       console.log(`price:${price}`);
+       console.log(`plot:${plotAmount}`);
+       
           writeContract({
             address: contractAddress,
             abi: contractABI,
             functionName: "BuyPlot",
-            args: [toBigInt(3), toBigInt(50), parseEther("0.01")],
-            value: parseEther("0.01"),
+            args: [
+              toBigInt(Number(tokenId)),
+              toBigInt(plotAmount),
+              parseUnits((plotAmount * price).toString(), "ether"),
+            ],
+            value: parseUnits((plotAmount * price).toString(), "ether"),
           });
-          console.log("Write contract call initiated after delay");
-        }, 100);
-        console.log("Write contract call initiated");
-        navigate(``)
+      // }, 10);
+        navigate(`/overview/${address}`);
       } catch (error) {
         console.error("Error in writeContract:", error);
       }
     },
-    [writeContract, isConnected]
+    [writeContract, isConnected,plotAmount,price,priceSize]
   );
 
   return (
@@ -125,7 +145,7 @@ const BuyPlots: FunctionComponent = () => {
                     />
                     <div className="flex-1 flex flex-col items-start justify-start pt-px px-0 pb-0 box-border min-w-[353px] max-w-full mq800:min-w-full">
                       <div className="self-stretch relative">
-                        N0 51, ADEKOLA str Lekki way, Island Lagos
+                        {data?.propertyLocation}
                       </div>
                     </div>
                   </div>
@@ -239,7 +259,7 @@ const BuyPlots: FunctionComponent = () => {
                       Unit value
                     </div>
                     <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 text-black whitespace-nowrap mq450:text-lgi mq450:leading-[32px]">
-                      $620
+                      ${data?.price}
                     </div>
                   </div>
                 </div>
@@ -252,8 +272,7 @@ const BuyPlots: FunctionComponent = () => {
                     <span className="text-sm"> Annual yield</span>
                   </div>
                   <div className="self-stretch relative text-sm text-gray-1100 whitespace-pre-wrap text-black">
-                    This price is subjected to increase depending on the of the
-                    property
+                    {data?.propertyDescription}
                   </div>
                 </div>
                 <div className="self-stretch h-[0.6px] flex flex-row items-start justify-start py-0 px-4 box-border max-w-full">
@@ -268,7 +287,9 @@ const BuyPlots: FunctionComponent = () => {
                       <input
                         type="text"
                         defaultValue="100"
+                        value={plotAmount}
                         className="w-full bg-transparent border-none outline-none text-black text-xs tracking-[0.01em]"
+                        onChange={(e) => setplotAmount(Number(e.target.value))}
                       />
                     </div>
                     <div className="flex-1 flex flex-row items-start justify-start relative min-w-[172px]">
@@ -276,6 +297,8 @@ const BuyPlots: FunctionComponent = () => {
                         <input
                           type="text"
                           defaultValue="2000"
+                          value={plotAmount*price}
+                          //onChange={() => setPriceSize(plotAmount * price)}
                           className="w-full bg-transparent border-none outline-none text-black text-xs tracking-[0.01em]"
                         />
                       </div>
