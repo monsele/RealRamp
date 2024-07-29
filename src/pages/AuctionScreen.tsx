@@ -18,7 +18,7 @@ const AuctionScreen: FunctionComponent = () => {
           src="/vuesaxlinearheart.svg"
         />
         <div className="absolute top-[9px] left-[46px] font-medium inline-block min-w-[50px]">
-          200 like
+          200 likes
         </div>
       </div>
       <img

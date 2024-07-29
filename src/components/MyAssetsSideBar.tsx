@@ -1,11 +1,11 @@
 import { FunctionComponent } from "react";
 import { Link } from "react-router-dom";
 import {useAccount} from 'wagmi'
-export type OverviewSidebarType = {
+export type MyAssetSideBarSidebarType = {
   className?: string;
 };
 
-const OverviewSidebar: FunctionComponent<OverviewSidebarType> = ({
+const MyAssetSideBarSidebar: FunctionComponent<MyAssetSideBarSidebarType> = ({
   className = "",
 }) => {
   const {address, isConnected} = useAccount();
@@ -53,6 +53,20 @@ const OverviewSidebar: FunctionComponent<OverviewSidebarType> = ({
             Overview
           </Link>
         </div>
+        <div className="self-stretch flex flex-row items-start justify-start py-[18px] px-6 gap-[10px]">
+          <img
+            className="h-6 w-6 relative min-h-[24px]"
+            loading="lazy"
+            alt=""
+            src="/vuesaxlinearcategory2.svg"
+          />
+          <Link
+            to={"/properties"}
+            className="relative inline-block min-w-[112px]"
+          >
+            My Properties
+          </Link>
+        </div>
         <button className="cursor-pointer py-3.5 px-6 bg-ntblack self-stretch rounded-3xs flex flex-row items-start justify-start gap-[10px] whitespace-nowrap border-[3px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[3px] hover:border-solid hover:border-skyblue-100">
           <img
             className="h-6 w-6 relative min-h-[24px]"
@@ -60,25 +74,9 @@ const OverviewSidebar: FunctionComponent<OverviewSidebarType> = ({
             src="/vuesaxlinearcategory2.svg"
           />
           <div className="relative text-lg font-outfit text-white-base text-left inline-block min-w-[112px]">
-            My Properties
+            My Assets
           </div>
         </button>
-        <div className="self-stretch rounded-3xs flex flex-row items-start justify-start py-[18px] px-6 gap-[10px]">
-          <img
-            className="h-6 w-6 relative min-h-[24px]"
-            loading="lazy"
-            alt=""
-            src="/vuesaxlinearhome2.svg"
-          />
-          <Link
-            to={`/myAssets/${
-              address !== undefined ? address : "Not-connected"
-            }`}
-            className="[text-decoration:none] relative text-[inherit] inline-block min-w-[77px]"
-          >
-            My Assets
-          </Link>
-        </div>
         <div className="self-stretch flex flex-row items-start justify-start py-[18px] px-6 gap-[10px] text-black">
           <img
             className="h-6 w-6 relative min-h-[24px]"
@@ -95,4 +93,4 @@ const OverviewSidebar: FunctionComponent<OverviewSidebarType> = ({
   );
 };
 
-export default OverviewSidebar;
+export default MyAssetSideBarSidebar;

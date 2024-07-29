@@ -14,6 +14,7 @@ import OnchainProviders from "./OnchainProviders";
 import MyPropertiesPage from "./pages/MyPropertiesPage";
 import BuyPlots from "./pages/BuyPlots";
 import ConnectPage from "./pages/ConnectPage";
+import MyAssetPage from "./pages/MyAssetPage";
 
 function App() {
   const action = useNavigationType();
@@ -62,6 +63,7 @@ function App() {
         <Route path="/properties" element={<MyPropertiesPage />} />
         <Route path="/buyPlot/:tokenId" element={<BuyPlots />} />
         <Route path="/connect" element={<ConnectPage />} />
+        <Route path="/myassets/:address" element={<MyAssetPage />} />
       </Routes>
     </OnchainProviders>
   );

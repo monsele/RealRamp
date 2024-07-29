@@ -1,5 +1,6 @@
 import { FunctionComponent, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { useAccount } from "wagmi";
 export type FrameComponentType = {
   className?: string;
 };
@@ -7,6 +8,7 @@ export type FrameComponentType = {
 const InvestorSidebar: FunctionComponent<FrameComponentType> = ({
   className = "",
 }) => {
+    const { address, isConnected } = useAccount();
   const onMenuItemsClick = useCallback(() => {
     // Please sync "Investors Properties" to the project
   }, []);
@@ -71,6 +73,22 @@ const InvestorSidebar: FunctionComponent<FrameComponentType> = ({
             className="h-6 w-6 relative min-h-[24px]"
             loading="lazy"
             alt=""
+            src="/vuesaxlinearcategory2.svg"
+          />
+          <Link
+            to={`/myAssets/${
+              address !== undefined ? address : "Not-connected"
+            }`}
+            className="relative inline-block min-w-[112px]"
+          >
+            My Assets
+          </Link>
+        </div>
+        <div className="self-stretch flex flex-row items-start justify-start py-[18px] px-6 gap-[10px]">
+          <img
+            className="h-6 w-6 relative min-h-[24px]"
+            loading="lazy"
+            alt=""
             src="/vuesaxlinearsetting2.svg"
           />
           <a className="[text-decoration:none] relative text-[inherit] inline-block min-w-[64px]">
@@ -83,3 +101,5 @@ const InvestorSidebar: FunctionComponent<FrameComponentType> = ({
 };
 
 export default InvestorSidebar;
+
+

@@ -52,7 +52,7 @@ const PropCard: FunctionComponent<PropCardType> = ({ className = "", title,Yield
       <button className="cursor-pointer [border:none] p-0 bg-white-base self-stretch rounded-t-none rounded-b-3xs flex flex-row items-start justify-start">
         <div className="flex-1 rounded-t-none rounded-b-3xs bg-white-base flex flex-row items-start justify-center py-[15px] px-5 gap-[8px]">
           <div className="flex flex-col items-start justify-start pt-0.5 px-0 pb-0">
-            <div className="relative text-base font-semibold font-outfit text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] text-left inline-block min-w-[26px]">{`Sell `}</div>
+            <div className="relative text-base font-semibold font-outfit text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] text-left inline-block min-w-[26px]">{`View Details `}</div>
           </div>
           <img
             className="h-6 w-6 relative min-h-[24px]"
