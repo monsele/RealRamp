@@ -5,13 +5,14 @@ import { contractABI, contractAddress } from "../abi/EstatePool";
 import { isAddress } from "ethers";
 import MyAssetSideBarSidebar from "../components/MyAssetsSideBar";
 import { UserTokenData } from "../utils/interfaces/interfaces";
+import PropCard from "../components/PropCard";
 const MyAssetPage: FunctionComponent = () => {
   const onListButtonClick = useCallback(() => {
     // Please sync "Publish Property" to the project
   }, []);
   //const [properties, setproperties] = useState<Data[] | undefined>(undefined);
   const { address } = useAccount();
-   const { isLoading, data: resultd } = useReadContract({
+   const { isLoading, data: userTokens } = useReadContract({
      abi: contractABI,
      address: contractAddress,
      functionName: "GetUserTokensData",
@@ -21,7 +22,7 @@ const MyAssetPage: FunctionComponent = () => {
  if (isLoading) {
   console.log("loading");
  }
-console.log(resultd);
+console.log(userTokens);
 
  
    
@@ -244,6 +245,21 @@ console.log(resultd);
 
               <div className="self-stretch flex flex-row items-start justify-end py-0 px-2.5 box-border max-w-full">
                 <div className="flex-1 grid flex-row items-start justify-start gap-[12px] max-w-full grid-cols-[repeat(3,_minmax(236px,_1fr))] mq450:grid-cols-[minmax(236px,_1fr)] mq750:justify-center mq750:grid-cols-[repeat(2,_minmax(236px,_409px))]">
+                  {userTokens?.length == 0 ? (
+                    <span>No Assets</span>
+                  ) : (
+                    userTokens?.map((item, index) => (
+                      <PropCard
+                        key={index}
+                        title={item.Name}
+                        LocationAddress={item.Description}
+                        Price=""
+                        Yield=""
+                        Action="Auction"
+                      />
+                    ))
+                  )}
+             
                 </div>
               </div>
             </div>
@@ -255,9 +271,7 @@ console.log(resultd);
         alt=""
         src="/group-1.svg"
       />
-      <div className="relative font-medium text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] hidden min-w-[83px] mq450:text-lgi">
-        Packets
-      </div>
+      <div className="relative font-medium text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] hidden min-w-[83px] mq450:text-lgi"></div>
       <div className="w-[333px] flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <img
           className="h-[35px] w-[35px] relative shrink-0"

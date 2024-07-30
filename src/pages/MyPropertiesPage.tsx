@@ -239,6 +239,7 @@ const PropertyManagersProps: FunctionComponent = () => {
                       LocationAddress={item.propertyLocation}
                       Price={item.price.toString() + " naira_x"}
                       Yield={item.annualYield + " %"}
+                      Action="View Details"
                     />
                   ))}
                 </div>
