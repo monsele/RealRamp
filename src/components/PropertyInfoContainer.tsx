@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 
 export type PropertyInfoContainerType = {
   className?: string;
@@ -7,6 +7,7 @@ export type PropertyInfoContainerType = {
 const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
   className = "",
 }) => {
+   const [amount, setAmount] = useState("");
   return (
     <div
       className={`self-stretch flex flex-row items-start justify-start gap-[36px] max-w-full text-left text-lg text-black font-outfit mq750:gap-[18px] mq1225:flex-wrap ${className}`}
@@ -61,8 +62,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
               </div>
             </div>
             <div className="self-stretch relative text-sm text-gray-800">
-              Ensure to give a convincing description of your properties to help
-              potential buyers notice you quick
+              You are auctioning an asset to be sold
             </div>
           </div>
           <div className="self-stretch flex flex-row items-start justify-start max-w-full">
@@ -278,6 +278,22 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
         </div>
         <div className="self-stretch h-[0.6px] flex flex-row items-start justify-start py-0 px-4 box-border max-w-full">
           <div className="self-stretch flex-1 relative box-border max-w-full border-t-[0.6px] border-solid border-gray-1200" />
+        </div>
+        <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
+          <label
+            htmlFor="amount"
+            className="text-sm font-medium text-gray-1000"
+          >
+            Enter auction amount
+          </label>
+          <input
+            type="number"
+            id="amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Enter amount"
+            className="self-stretch py-2.5 px-4 bg-white-base rounded-11xl border-[1px] border-solid border-gray-1200 text-base text-gray-1000 outline-none"
+          />
         </div>
         <button className="cursor-pointer py-2.5 px-5 bg-ntblack self-stretch rounded-11xl flex flex-row items-start justify-center whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
           <div className="relative text-base font-outfit text-white-base text-left inline-block min-w-[97px]">

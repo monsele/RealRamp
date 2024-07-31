@@ -11,7 +11,7 @@ const AuctionScreen: FunctionComponent = () => {
           <PropertyInfoContainer />
         </section>
       </main>
-      <div className="w-[106px] h-9 relative [backdrop-filter:blur(4px)] rounded-[37px] bg-gray-1300 hidden whitespace-nowrap">
+      {/* <div className="w-[106px] h-9 relative [backdrop-filter:blur(4px)] rounded-[37px] bg-gray-1300 hidden whitespace-nowrap">
         <img
           className="absolute top-[6px] left-[10px] w-6 h-6"
           alt=""
@@ -20,7 +20,7 @@ const AuctionScreen: FunctionComponent = () => {
         <div className="absolute top-[9px] left-[46px] font-medium inline-block min-w-[50px]">
           200 likes
         </div>
-      </div>
+      </div> */}
       <img
         className="w-[35px] h-[35px] relative shrink-0"
         alt=""
