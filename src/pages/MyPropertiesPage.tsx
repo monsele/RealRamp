@@ -11,7 +11,6 @@ const PropertyManagersProps: FunctionComponent = () => {
   const onListButtonClick = useCallback(() => {
     // Please sync "Publish Property" to the project
   }, []);
-  //const [properties, setproperties] = useState<Data[] | undefined>(undefined);
   const { address } = useAccount();
   const { data } = useQuery({
     queryKey: ["fore"],

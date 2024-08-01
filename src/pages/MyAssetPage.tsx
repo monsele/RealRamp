@@ -6,6 +6,7 @@ import { isAddress } from "ethers";
 import MyAssetSideBarSidebar from "../components/MyAssetsSideBar";
 import { UserTokenData } from "../utils/interfaces/interfaces";
 import PropCard from "../components/PropCard";
+import AuctionCard from "../components/AuctionCard";
 const MyAssetPage: FunctionComponent = () => {
   const onListButtonClick = useCallback(() => {
     // Please sync "Publish Property" to the project
@@ -249,13 +250,13 @@ console.log(userTokens);
                     <span>No Assets</span>
                   ) : (
                     userTokens?.map((item, index) => (
-                      <PropCard
+                      <AuctionCard
                         key={index}
-                        title={item.Name}
-                        LocationAddress={item.Description}
-                        Price=""
-                        Yield=""
-                        Action="Auction"
+                        propertyLocation={item.Description}
+                        price={0.2}
+                        propertyTitle={item.Name}
+                        smartContractId={Number(item.tokenId)}
+
                       />
                     ))
                   )}

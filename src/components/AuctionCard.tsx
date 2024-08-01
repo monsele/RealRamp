@@ -1,9 +1,9 @@
 import { FunctionComponent } from "react";
 import {Link} from 'react-router-dom';
-import { useReadContract } from "wagmi";
+import { useReadContract,useAccount } from "wagmi";
 import { contractABI, contractAddress } from "../abi/EstatePool";
 import { toBigInt, formatUnits } from "ethers";
-export type ExploreCardType = {
+export type AuctionCardType = {
   className?: string;
   propertyTitle: string;
   propertyLocation: string;
@@ -12,19 +12,19 @@ export type ExploreCardType = {
   smartContractId:Number;
 };
 
-const ExploreCard: FunctionComponent<ExploreCardType> = ({
+const AuctionCard: FunctionComponent<AuctionCardType> = ({
   className = "",
   propertyTitle,
-  plots,
   price,
   propertyLocation,
   smartContractId
 }) => {
+  const {address}= useAccount();
    const result = useReadContract({
      abi: contractABI,
      address: contractAddress,
-     functionName: "availaibleTokenAmount",
-     args: [toBigInt(smartContractId.toString())],
+     functionName: "balanceOf",
+     args: [`0x${address?.slice(2)}`,toBigInt(smartContractId.toString())],
    });
    console.log(result.data);
   return (
@@ -76,10 +76,10 @@ const ExploreCard: FunctionComponent<ExploreCardType> = ({
       <div className="flex flex-row items-start justify-start py-0 px-[78px] mq450:pl-5 mq450:pr-5 mq450:box-border">
         <div className="rounded-11xl flex flex-row items-start justify-start py-2 px-6">
           <Link
-            to={`/buyPlot/${smartContractId}`}
+            to={`/auction/${smartContractId}`}
             className="relative font-semibold text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] inline-block min-w-[57px]"
           >
-            Buy
+            Auction
           </Link>
         </div>
       </div>
@@ -87,4 +87,4 @@ const ExploreCard: FunctionComponent<ExploreCardType> = ({
   );
 };
 
-export default ExploreCard;
+export default AuctionCard;

@@ -35,24 +35,12 @@ const BuyPlots: FunctionComponent = () => {
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      console.log("Submit button clicked");
-
       if (!isConnected) {
         console.error("Wallet not connected");
         return;
       }
 
-      if (!writeContract) {
-        console.error("writeContract is not available");
-        return;
-      }
-
       try {
-        console.log("Attempting to write contract");
-       console.log(plotAmount*price);
-       console.log(`price:${price}`);
-       console.log(`plot:${plotAmount}`);
-       
           writeContract({
             address: contractAddress,
             abi: contractABI,

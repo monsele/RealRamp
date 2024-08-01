@@ -7,6 +7,7 @@ export type PropCardType = {
   Price?: string;
   Yield?: string;
   Action?: string;
+
 };
 const PropCard: FunctionComponent<PropCardType> = ({
   className = "",

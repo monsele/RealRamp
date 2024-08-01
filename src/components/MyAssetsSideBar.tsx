@@ -8,7 +8,7 @@ export type MyAssetSideBarSidebarType = {
 const MyAssetSideBarSidebar: FunctionComponent<MyAssetSideBarSidebarType> = ({
   className = "",
 }) => {
-  const {address, isConnected} = useAccount();
+  const {address} = useAccount();
   return (
     <div
       className={`self-stretch flex flex-col items-end justify-start gap-[25px] text-left text-9xl text-black font-outfit ${className}`}
