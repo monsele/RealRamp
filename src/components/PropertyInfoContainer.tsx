@@ -1,64 +1,78 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import {useWaitForTransactionReceipt, useWriteContract, useConnect} from 'wagmi'
+import {
+  useWaitForTransactionReceipt,
+  useWriteContract,
+  useConnect,
+  useAccount
+} from "wagmi";
 import { contractABI, contractAddress } from "../abi/EstatePool";
-import { parseUnits, toBigInt } from "ethers";
+import {  toBigInt } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
-import { log } from "console";
+import axios from "axios";
 export type PropertyInfoContainerType = {
   className?: string;
-  tokenId: string;
+  tokenId?: string;
+  nameOfAsset?:string;
 };
 
 const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
   className = "",
-  tokenId
+  tokenId,
+  nameOfAsset
 }) => {
-   const [amount, setAmount] = useState("");
-    const { writeContract, data: hash } = useWriteContract();
+  const [amount, setAmount] = useState("");
+  const [bidAmount, setbidAmount] = useState("");
+  const { writeContract, data: hash } = useWriteContract();
+  const {address} = useAccount();
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
     useWaitForTransactionReceipt({
       hash,
     });
-    const handleSubmit = async () => {
-      console.log(amount);
-
-      try {
-        const result = await writeContract({
-          address: contractAddress,
-          abi: contractABI,
-          functionName: "AuctionAsset",
-          args: [BigInt(tokenId), toBigInt(amount)],
-        });
-
-        // The transaction hash is available in result
-        console.log("Transaction submitted:", result);
-      } catch (error) {
-        console.error("Error submitting transaction:", error);
-      }
-    };
-    //console.log(hash);
-    useEffect(() => {
+    async function handleTransaction() {
       if (isTransactionLoading) {
-        console.log("Transaction Loadin");
-        toast("Transaction In Progress")
+        console.log("Transaction Loading");
+        toast("Transaction In Progress");
       }
       if (isTransactionSuccess) {
-        // Transaction is successful, you can now:
-        // 1. Display a success message
-        console.log("Transaction Success");
-        
-        toast("Auction started successfully!");
-        // 2. Navigate to another page
-        // If you're using React Router, you can use the useNavigate hook:
-        // const navigate = useNavigate();
-        // navigate('/some-other-page');
+        // Transaction is successful
+        const axResult = await axios.post("https://localhost:7280/auction", {
+          id: 0,
+          nameOfAsset: nameOfAsset,
+          tokenId: tokenId,
+          initialBid: bidAmount,
+          owner: address,
+        });
+        // Handle the response here (e.g., display success message)
+        console.log(axResult.data);
+        toast("Auction Successfullt Made");
       }
-    }, [isTransactionSuccess,isTransactionLoading]);
+    }
+  const handleSubmit = async () => {
+
+    try {
+      const result = await writeContract({
+        address: contractAddress,
+        abi: contractABI,
+        functionName: "AuctionAsset",
+        args: [BigInt(Number(tokenId)), toBigInt(amount)],
+      });
+      console.log("Transaction submitted:", result);
+    } catch (error) {
+      console.error("Error submitting transaction:", error);
+    }
+  };
+  //console.log(hash);
+  useEffect(() => {
+    handleTransaction();
+  }, [
+    isTransactionLoading,
+    isTransactionSuccess
+  ]);
   return (
     <div
       className={`self-stretch flex flex-row items-start justify-start gap-[36px] max-w-full text-left text-lg text-black font-outfit mq750:gap-[18px] mq1225:flex-wrap ${className}`}
     >
-      <Toaster/>
+      <Toaster />
       <div className="flex-1 flex flex-col items-start justify-start pt-[3px] px-0 pb-0 box-border min-w-[391px] max-w-full mq1050:min-w-full">
         <div className="self-stretch shadow-[2px_4px_30px_#e9eefd] rounded-3xs bg-white-base flex flex-col items-start justify-start p-[18px] box-border gap-[21px] max-w-full z-[1]">
           <div className="flex flex-row items-start justify-center gap-[10px] mq450:flex-wrap">
@@ -339,6 +353,22 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Enter amount"
+            className="self-stretch py-2.5 px-4 bg-white-base rounded-11xl border-[1px] border-solid border-gray-1200 text-base text-gray-1000 outline-none"
+          />
+        </div>
+        <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
+          <label
+            htmlFor="amount"
+            className="text-sm font-medium text-gray-1000"
+          >
+            Enter bid amount
+          </label>
+          <input
+            type="number"
+            id="bidAmount"
+            value={bidAmount}
+            onChange={(e) => setbidAmount(e.target.value)}
+            placeholder="Enter Bid"
             className="self-stretch py-2.5 px-4 bg-white-base rounded-11xl border-[1px] border-solid border-gray-1200 text-base text-gray-1000 outline-none"
           />
         </div>

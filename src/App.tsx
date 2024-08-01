@@ -58,7 +58,7 @@ function App() {
         <Route path="/" element={<FullExplore />} />
         <Route path="/overview/:address" element={<InvestorOverview />} />
         <Route path="/publish" element={<PublishProperty />} />
-        <Route path="/auction/:tokenId" element={<AuctionScreen />} />
+        <Route path="/auction/:tokenId/:name" element={<AuctionScreen />} />
         <Route path="/bid" element={<BidScreen />} />
         <Route path="/properties" element={<MyPropertiesPage />} />
         <Route path="/buyPlot/:tokenId" element={<BuyPlots />} />
