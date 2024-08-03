@@ -3,12 +3,17 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
   useConnect,
-  useAccount
+  useAccount,
+  useTransactionReceipt,
+  useWatchContractEvent,
+ 
 } from "wagmi";
+
 import { contractABI, contractAddress } from "../abi/EstatePool";
-import {  toBigInt } from "ethers";
+import {  ethers, toBigInt } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 export type PropertyInfoContainerType = {
   className?: string;
   tokenId?: string;
@@ -22,12 +27,31 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
 }) => {
   const [amount, setAmount] = useState("");
   const [bidAmount, setbidAmount] = useState("");
+  //const [shouldWatchEvent, setShouldWatchEvent] = useState(false);
   const { writeContract, data: hash } = useWriteContract();
   const {address} = useAccount();
+  
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
     useWaitForTransactionReceipt({
       hash,
     });
+    const reciept = useTransactionReceipt({
+      hash
+    });
+      const unwatch= useWatchContractEvent({
+       address: contractAddress,
+       abi: contractABI,
+       eventName: "AuctionCreated",
+       onLogs: (logs) => {
+         logs.forEach((log) => {
+           const { creator, amount } = log.args;
+           console.log("AuctionAsset result - creator:", creator);
+           console.log("AuctionAsset result - amount:", amount?.toString());
+         });
+       },
+     // enabled: shouldWatchEvent,
+     });
+    unwatch;
     async function handleTransaction() {
       if (isTransactionLoading) {
         console.log("Transaction Loading");
@@ -35,20 +59,22 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
       }
       if (isTransactionSuccess) {
         // Transaction is successful
+        console.log(reciept.data);
+        console.log(hash);
         const axResult = await axios.post("https://localhost:7280/auction", {
           id: 0,
           nameOfAsset: nameOfAsset,
           tokenId: tokenId,
           initialBid: bidAmount,
           owner: address,
+          tokenAmount:amount,
         });
         // Handle the response here (e.g., display success message)
         console.log(axResult.data);
-        toast("Auction Successfullt Made");
+        toast("Auction Successfully Made");
       }
     }
   const handleSubmit = async () => {
-
     try {
       const result = await writeContract({
         address: contractAddress,
@@ -61,9 +87,10 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
       console.error("Error submitting transaction:", error);
     }
   };
-  //console.log(hash);
   useEffect(() => {
-    handleTransaction();
+    if (isTransactionSuccess) {
+      handleTransaction();
+    }
   }, [
     isTransactionLoading,
     isTransactionSuccess
@@ -387,3 +414,5 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
 };
 
 export default PropertyInfoContainer;
+
+

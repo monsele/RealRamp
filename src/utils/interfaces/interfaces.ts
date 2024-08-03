@@ -17,3 +17,13 @@
   description: string;
   amountOwned: bigint;
 }
+
+export interface Auction {
+  id: number;
+  nameOfAsset: string;
+  tokenId: number;
+  initialBid: string;
+  owner: string;
+  completed: boolean;
+  tokenAmount: string;
+}

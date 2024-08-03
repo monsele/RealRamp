@@ -1,5 +1,11 @@
-import { FunctionComponent, useCallback } from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
+import { useWriteContract, useWaitForTransactionReceipt,useAccount} from "wagmi";
+import { contractABI, contractAddress } from "../abi/EstatePool";
+import {useNavigate, useParams} from 'react-router-dom'
+import toast, { Toaster } from "react-hot-toast";
+import { parseEther } from "ethers";
 
+//import { Address } from "@coinbase/onchainkit/identity";
 const BidScreen: FunctionComponent = () => {
   const onFrameContainerClick = useCallback(() => {
     // Please sync "CONNECTED WALLET" to the project
@@ -8,9 +14,43 @@ const BidScreen: FunctionComponent = () => {
   const onFrameContainerClick1 = useCallback(() => {
     // Please sync "Auction Screen/analytics" to the project
   }, []);
+  const [offer, setoffer] = useState("");
+  const { writeContract, data: hash } = useWriteContract();
+  const {address} = useAccount();
+  const {auctionId} = useParams();
+  const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
+  const navigate = useNavigate();
+const handleSubmit = async () => {
+  console.log(offer);
+  toast("Success");
+  setTimeout(() => {
+    navigate(`/myassets/${address}`);
+  }, 5000);
+  
+    // const result = await writeContract({
+    //   address: contractAddress,
+    //   abi: contractABI,
+    //   functionName: "PayBid",
+    //   args: [BigInt(Number(auctionId)), BigInt(offer)],
+    //   value:parseEther("0.25")
+    // });
+};
+
+  // useEffect(() => {
+  //   if (isTransactionSuccess) {
+  //    toast("Bid completed Successfully")
+  //   }
+  //   if (!isTransactionSuccess) {
+  //     toast("Bid failed: Make sure you pay the right amount")
+  //   }
+  // }, [isTransactionSuccess]);
 
   return (
     <div className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[165px] box-border gap-[649px] leading-[normal] tracking-[normal] text-left text-sm text-white-base font-outfit mq450:gap-[162px] mq450:pl-5 mq450:pr-5 mq450:box-border mq750:gap-[324px] mq750:pl-[74px] mq750:pr-[74px] mq750:box-border mq1225:h-auto">
+      <Toaster />
       <main className="self-stretch flex flex-row items-start justify-start py-0 pr-[29px] pl-[30px] box-border max-w-full shrink-0">
         <section className="flex-1 flex flex-col items-start justify-start gap-[30px] shrink-0 max-w-full text-left text-lg text-black font-outfit">
           {/* <header className="self-stretch shadow-[2px_4px_30px_#e9eefd] rounded-[61px] bg-white-base flex flex-row items-start justify-start p-3 box-border gap-[48.5px] top-[0] z-[99] sticky max-w-full text-left text-5xl text-ntblack font-outfit mq750:gap-[24px]">
@@ -222,7 +262,7 @@ const BidScreen: FunctionComponent = () => {
                     <div className="flex flex-row items-center justify-center">
                       <h2 className="m-0 relative text-inherit font-medium font-inherit inline-block min-w-[82px] mq450:text-lgi">{`Auction `}</h2>
                     </div>
-                    <button className="cursor-pointer py-[7px] px-3 bg-[transparent] flex-1 rounded-11xl flex flex-row items-center justify-center gap-[10px] border-[2px] border-solid border-base-blue hover:bg-skyblue-200 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue-100">
+                    {/* <button className="cursor-pointer py-[7px] px-3 bg-[transparent] flex-1 rounded-11xl flex flex-row items-center justify-center gap-[10px] border-[2px] border-solid border-base-blue hover:bg-skyblue-200 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue-100">
                       <img
                         className="h-4 w-4 relative min-h-[16px]"
                         alt=""
@@ -231,7 +271,7 @@ const BidScreen: FunctionComponent = () => {
                       <div className="relative text-xs font-medium font-outfit text-gray-400 text-left inline-block min-w-[66px]">
                         3hrs : 30min
                       </div>
-                    </button>
+                    </button> */}
                   </div>
                 </div>
                 <div className="self-stretch flex flex-row items-start justify-start text-left text-sm text-gray-900">
@@ -257,10 +297,12 @@ const BidScreen: FunctionComponent = () => {
                   </div>
                 </div>
               </div>
-              <div className="self-stretch flex flex-row items-start justify-start gap-[15.7px] text-gray-1000 mq450:flex-wrap">
+              <div className="self-stretch flex flex-row items-start justify-start gap-[15.7px] text-black-1000 mq450:flex-wrap">
                 <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
-                  <div className="self-stretch relative">Total value</div>
-                  <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 whitespace-nowrap mq450:text-lgi mq450:leading-[32px]">
+                  <div className="self-stretch relative text-black dark:text-white">
+                    Total value
+                  </div>
+                  <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-black dark:text-white whitespace-nowrap mq450:text-lgi mq450:leading-[32px]">
                     $75,620
                   </div>
                 </div>
@@ -268,8 +310,10 @@ const BidScreen: FunctionComponent = () => {
                   <div className="w-[0.5px] h-[45.5px] relative box-border border-r-[0.5px] border-solid border-gray-1200" />
                 </div>
                 <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
-                  <div className="self-stretch relative">Acers</div>
-                  <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 mq450:text-lgi mq450:leading-[32px]">
+                  <div className="self-stretch relative text-black dark:text-white">
+                    Acers
+                  </div>
+                  <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-black dark:text-white mq450:text-lgi mq450:leading-[32px]">
                     500
                   </div>
                 </div>
@@ -277,8 +321,10 @@ const BidScreen: FunctionComponent = () => {
                   <div className="w-[0.5px] h-[45.5px] relative box-border border-r-[0.5px] border-solid border-gray-1200" />
                 </div>
                 <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
-                  <div className="self-stretch relative">Annual yield</div>
-                  <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 mq450:text-lgi mq450:leading-[32px]">
+                  <div className="self-stretch relative text-black dark:text-white">
+                    Annual yield
+                  </div>
+                  <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-black dark:text-white mq450:text-lgi mq450:leading-[32px]">
                     20%
                   </div>
                 </div>
@@ -287,14 +333,20 @@ const BidScreen: FunctionComponent = () => {
                 <div className="self-stretch flex-1 relative box-border max-w-full border-t-[0.6px] border-solid border-gray-1200" />
               </div>
               <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
-                <div className="relative font-medium inline-block min-w-[99px]">
+                <div className="relative font-medium inline-block min-w-[99px] text-black dark:text-white">
                   Enter your offer
                 </div>
-                <div className="self-stretch rounded-3xs bg-dimgray-200 flex flex-row items-end justify-start pt-[9px] px-4 pb-3 gap-[186px] text-5xl text-gray-200 border-[1px] border-solid border-whitesmoke-200 mq450:gap-[93px] mq750:flex-wrap">
-                  <div className="flex flex-col items-start justify-end pt-0 px-0 pb-[3.5px]">
-                    <div className="relative tracking-[0.01em] inline-block min-w-[62px] mq450:text-lgi">
-                      2000
-                    </div>
+                <div className="self-stretch rounded-3xs bg-dimgray-200 flex flex-row items-end justify-start pt-[9px] px-4 pb-3 gap-[186px] text-5xl text-black-200 border-[1px] border-solid border-whitesmoke-200 mq450:gap-[93px] mq750:flex-wrap">
+                  <div className="flex flex-col items-start justify-end pt-0 px-0 pb-[3.5px] text-black dark:text-white">
+                    <input
+                      type="text"
+                      defaultValue="2000"
+                      value={offer}
+                      onChange={(e) => {
+                        setoffer(e.target.value);
+                      }}
+                      className="relative tracking-[0.01em] min-w-[62px] mq450:text-lgi text-black dark:text-white border-none focus:outline-none focus:ring-0 font-inherit text-inherit"
+                    />
                   </div>
                   <div className="h-10 flex flex-row items-start justify-start gap-[30px] text-base text-darkslategray-300">
                     <div className="h-[41px] w-px relative box-border z-[1] border-r-[1px] border-solid border-darkslategray-300" />
@@ -306,7 +358,10 @@ const BidScreen: FunctionComponent = () => {
                   </div>
                 </div>
               </div>
-              <button className="cursor-pointer py-2.5 px-5 bg-ntblack self-stretch rounded-11xl flex flex-row items-start justify-center whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue-100">
+              <button
+                onClick={handleSubmit}
+                className="cursor-pointer py-2.5 px-5 bg-ntblack self-stretch rounded-11xl flex flex-row items-start justify-center whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue-100"
+              >
                 <div className="relative text-base font-outfit text-white-base text-left inline-block min-w-[65px]">
                   Place bid
                 </div>
@@ -362,3 +417,4 @@ const BidScreen: FunctionComponent = () => {
 };
 
 export default BidScreen;
+

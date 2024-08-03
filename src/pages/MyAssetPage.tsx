@@ -7,6 +7,7 @@ import MyAssetSideBarSidebar from "../components/MyAssetsSideBar";
 import { UserTokenData } from "../utils/interfaces/interfaces";
 import PropCard from "../components/PropCard";
 import AuctionCard from "../components/AuctionCard";
+import { Toaster } from "react-hot-toast";
 const MyAssetPage: FunctionComponent = () => {
   const onListButtonClick = useCallback(() => {
     // Please sync "Publish Property" to the project
@@ -39,6 +40,7 @@ console.log(userTokens);
    
   return (
     <div className="w-full h-[1183px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start gap-[325px] leading-[normal] tracking-[normal] text-left text-5xl font-outfit lg:h-auto lg:gap-[162px] mq450:gap-[41px] mq750:gap-[81px]">
+      <Toaster/>
       <main className="w-[1382px] flex flex-row flex-wrap items-start justify-start py-0 pr-5 pl-0 box-border gap-[45px] shrink-0 max-w-full text-left text-5xl font-outfit mq750:gap-[22px]">
         <div className="w-[328px] shadow-[2px_4px_30px_#e9eefd] rounded-tl-none rounded-tr-lg rounded-b-none bg-white-base overflow-hidden shrink-0 flex flex-col items-start justify-start pt-8 pb-[591px] pr-3 pl-0 box-border gap-[49.7px] max-w-full z-[1] mq450:gap-[25px] mq750:pt-5 mq750:pb-[250px] mq750:box-border mq1050:pt-[21px] mq1050:pb-96 mq1050:box-border">
           <div className="w-[296.1px] flex flex-row items-start justify-center py-0 px-5 box-border">

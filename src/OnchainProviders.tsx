@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { base,baseSepolia } from "viem/chains";
-import { WagmiProvider } from "wagmi";
+import { baseSepolia } from "viem/chains";
+import { WagmiProvider,http } from "wagmi";
 import {
   RainbowKitProvider,
   connectorsForWallets,
@@ -36,7 +36,14 @@ const wagmiConfig = getDefaultConfig({
   wallets,
   projectId: "1b8a76a4b6f972f3465c27dc3bb483cd",
   chains: [baseSepolia],
-  ssr: false, // If your dApp uses server side rendering (SSR)
+  ssr: false,
+  syncConnectedChain: true,
+  transports: {
+    [baseSepolia.id]: http(
+      `https://base-sepolia.g.alchemy.com/v2/Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI`
+    ),
+  },
+  // If your dApp uses server side rendering (SSR)
 });
 
 function OnchainProviders({ children }: Props) {
@@ -57,3 +64,5 @@ function OnchainProviders({ children }: Props) {
 }
 
 export default OnchainProviders;
+
+
