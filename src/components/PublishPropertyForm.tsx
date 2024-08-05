@@ -1,13 +1,13 @@
-import { FormEvent, FunctionComponent, useCallback, useState } from "react";
+import { FormEvent, FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropertyInput from "./PropertyInput";
+import { Alchemy,Network } from "alchemy-sdk";
 import {
-  useReadContract,
-  type UseReadContractParameters,
   useWriteContract,
   useAccount,
+  useWaitForTransactionReceipt,
 } from "wagmi";
-import { toBigInt } from "ethers";
+import { ethers, toBigInt,AlchemyProvider } from "ethers";
 import { contractABI, contractAddress } from "../abi/EstatePool";
 import toast, {Toaster} from "react-hot-toast";
 export type PublishPropertyFormType = {
@@ -23,9 +23,38 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   const [totalUnits, settotalUnits] = useState("1000");
   const [category, setCategory] = useState("0");
 
-  const { writeContract } = useWriteContract();
+  const { writeContract, data: hash } = useWriteContract();
+  const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
   const navigate = useNavigate();
+  const config = {
+    apiKey: "Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI",
+    network: Network.BASE_SEPOLIA, // Replace with your desired network
+  };
+  //  const provider = new ethers.AlchemyProvider(
+  //    Network.BASE_SEPOLIA,
+  //    "Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI"
+  //  );
+  const webprovider = new ethers.WebSocketProvider(
+    "wss://base-sepolia.g.alchemy.com/v2/Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI"
+  );
+  const contract = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    webprovider
+  );
+
   const { isConnected, address } = useAccount();
+  const getEvent = async()=>{
+    console.log("Inside the event function");
+    contract.on("TokenListed", (owner, name, id) => {
+      console.log(owner);
+      console.log(name);
+      console.log(id);
+    });
+  }
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault(); // Prevent default form submission
@@ -43,12 +72,12 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
         writeContract({
           address: contractAddress,
           abi: contractABI,
-          functionName: "CreateAsset", 
+          functionName: "CreateAsset",
           args: [
             propertyTitle,
             toBigInt(totalUnits),
             toBigInt(Number(totalUnits) / 2),
-            Number(category)
+            Number(category),
           ],
         });
         console.log("Property submission initiated");
@@ -68,6 +97,13 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
       navigate,
     ]
   );
+
+  useEffect(() => {
+    console.log("UseEffect triggered");
+    getEvent();
+   
+    console.log("Happend");
+  }, [isTransactionLoading, isTransactionSuccess]);
 
   return (
     <form

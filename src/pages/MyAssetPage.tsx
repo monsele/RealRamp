@@ -2,10 +2,8 @@ import { FunctionComponent, useCallback, useEffect } from "react";
 import TabCard from "../components/TabCard";
 import { useAccount, useReadContract } from "wagmi";
 import { contractABI, contractAddress } from "../abi/EstatePool";
-import { isAddress } from "ethers";
 import MyAssetSideBarSidebar from "../components/MyAssetsSideBar";
 import { UserTokenData } from "../utils/interfaces/interfaces";
-import PropCard from "../components/PropCard";
 import AuctionCard from "../components/AuctionCard";
 import { Toaster } from "react-hot-toast";
 const MyAssetPage: FunctionComponent = () => {
