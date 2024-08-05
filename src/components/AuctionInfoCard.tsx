@@ -10,6 +10,7 @@ export type AuctionInfoCardType = {
   plots?: string;
   price: Number;
   smartContractId: Number;
+  auctionId:string;
 };
 
 const AuctionInfoCard: FunctionComponent<AuctionInfoCardType> = ({
@@ -19,12 +20,13 @@ const AuctionInfoCard: FunctionComponent<AuctionInfoCardType> = ({
   price,
   propertyLocation,
   smartContractId,
+  auctionId,
 }) => {
   const result = useReadContract({
     abi: contractABI,
     address: contractAddress,
-    functionName: "availaibleTokenAmount",
-    args: [toBigInt(smartContractId.toString())],
+    functionName: "auction",
+    args: [toBigInt(auctionId)],
   });
   console.log(result.data);
   return (
@@ -60,7 +62,7 @@ const AuctionInfoCard: FunctionComponent<AuctionInfoCardType> = ({
           <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
             <div className="relative font-medium inline-block min-w-[84px]">
               <span>{price.toString()}</span>
-              <span className="text-xs text-gray-500">MIN</span>
+              <span className="text-xs text-gray-500"> BID </span>
             </div>
           </div>
           <div className="h-[20.5px] w-[0.5px] relative box-border border-r-[0.5px] border-solid border-gray-600" />
@@ -74,7 +76,7 @@ const AuctionInfoCard: FunctionComponent<AuctionInfoCardType> = ({
       <div className="flex flex-row items-start justify-start py-0 px-[78px] mq450:pl-5 mq450:pr-5 mq450:box-border">
         <div className="rounded-11xl flex flex-row items-start justify-start py-2 px-6">
           <Link
-            to={`/bid/:auctionId`}
+            to={`/bid/${auctionId}`}
             className="relative font-semibold text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] inline-block min-w-[57px]"
           >
             Join Bid

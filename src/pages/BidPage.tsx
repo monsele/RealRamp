@@ -3,7 +3,7 @@ import { useWriteContract, useWaitForTransactionReceipt,useAccount} from "wagmi"
 import { contractABI, contractAddress } from "../abi/EstatePool";
 import {useNavigate, useParams} from 'react-router-dom'
 import toast, { Toaster } from "react-hot-toast";
-import { parseEther } from "ethers";
+import { parseEther, parseUnits } from "ethers";
 
 //import { Address } from "@coinbase/onchainkit/identity";
 const BidScreen: FunctionComponent = () => {
@@ -26,27 +26,31 @@ const BidScreen: FunctionComponent = () => {
 const handleSubmit = async () => {
   console.log(offer);
   toast("Success");
-  setTimeout(() => {
-    navigate(`/myassets/${address}`);
-  }, 5000);
+ 
   
-    // const result = await writeContract({
-    //   address: contractAddress,
-    //   abi: contractABI,
-    //   functionName: "PayBid",
-    //   args: [BigInt(Number(auctionId)), BigInt(offer)],
-    //   value:parseEther("0.25")
-    // });
+    const result = await writeContract({
+      address: contractAddress,
+      abi: contractABI,
+      functionName: "PayBid",
+      args: [BigInt(Number(auctionId)), parseUnits(offer, "ether")],
+      value: parseUnits(offer, "ether"),
+    });
 };
-
-  // useEffect(() => {
-  //   if (isTransactionSuccess) {
-  //    toast("Bid completed Successfully")
-  //   }
-  //   if (!isTransactionSuccess) {
-  //     toast("Bid failed: Make sure you pay the right amount")
-  //   }
-  // }, [isTransactionSuccess]);
+ 
+  useEffect(() => {
+    if (isTransactionLoading) {
+      toast("Transaction In progress");
+    }
+    if (isTransactionSuccess) {
+     toast("Bid completed Successfully")
+      setTimeout(() => {
+        navigate(`/myassets/${address}`);
+      }, 5000);
+    }
+    if (!isTransactionSuccess) {
+      toast("Bid failed: Make sure you pay the right amount")
+    }
+  }, [isTransactionSuccess]);
 
   return (
     <div className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[165px] box-border gap-[649px] leading-[normal] tracking-[normal] text-left text-sm text-white-base font-outfit mq450:gap-[162px] mq450:pl-5 mq450:pr-5 mq450:box-border mq750:gap-[324px] mq750:pl-[74px] mq750:pr-[74px] mq750:box-border mq1225:h-auto">

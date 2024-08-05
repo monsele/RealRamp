@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import ExploreCard from "./ExploreCard";
 import { useQuery } from "@tanstack/react-query";
-import axios from 'axios'
+import axios from "axios";
 import { Auction } from "../utils/interfaces/interfaces";
 import AuctionInfoCard from "./AuctionInfoCard";
 export type AuctionsContainerType = {
@@ -19,14 +19,14 @@ const AuctionsContainer: FunctionComponent<AuctionsContainerType> = ({
       return data as Auction[];
     },
   });
-  
- console.log(data);
-//  const result = useReadContract({
-//    abi: contractABI,
-//    address: contractAddress,
-//    functionName: "GetListedTokens",
-//    args: [],
-//  });
+
+  console.log(data);
+  //  const result = useReadContract({
+  //    abi: contractABI,
+  //    address: contractAddress,
+  //    functionName: "GetListedTokens",
+  //    args: [],
+  //  });
   // useEffect(() => {
   //   setfirst(result);
   // }, [])
@@ -43,6 +43,7 @@ const AuctionsContainer: FunctionComponent<AuctionsContainerType> = ({
           price={Number(item.initialBid)}
           propertyLocation={item.owner}
           smartContractId={item.tokenId}
+          auctionId={item.id.toString()}
         />
       ))}
     </section>
