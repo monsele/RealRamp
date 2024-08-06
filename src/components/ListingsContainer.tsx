@@ -18,7 +18,6 @@ const ListingsContainer: FunctionComponent<ListingsContainerType> = ({
       return data as PropertyType[];
     },
   });
-  
  console.log(data);
 //  const result = useReadContract({
 //    abi: contractABI,

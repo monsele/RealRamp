@@ -1,15 +1,21 @@
-import { FormEvent, FunctionComponent, useCallback, useEffect, useState } from "react";
+import {
+  FormEvent,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import PropertyInput from "./PropertyInput";
-import { Alchemy,Network } from "alchemy-sdk";
 import {
   useWriteContract,
   useAccount,
   useWaitForTransactionReceipt,
 } from "wagmi";
-import { ethers, toBigInt,AlchemyProvider } from "ethers";
+import { ethers, toBigInt } from "ethers";
+import axios from "axios";
 import { contractABI, contractAddress } from "../abi/EstatePool";
-import toast, {Toaster} from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 export type PublishPropertyFormType = {
   className?: string;
 };
@@ -22,6 +28,8 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   const [desc, setDesc] = useState("");
   const [totalUnits, settotalUnits] = useState("1000");
   const [category, setCategory] = useState("0");
+  const [price, setPrice] = useState("0");
+  const [exYield, setYield] = useState(0);
 
   const { writeContract, data: hash } = useWriteContract();
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
@@ -29,14 +37,6 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
       hash,
     });
   const navigate = useNavigate();
-  const config = {
-    apiKey: "Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI",
-    network: Network.BASE_SEPOLIA, // Replace with your desired network
-  };
-  //  const provider = new ethers.AlchemyProvider(
-  //    Network.BASE_SEPOLIA,
-  //    "Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI"
-  //  );
   const webprovider = new ethers.WebSocketProvider(
     "wss://base-sepolia.g.alchemy.com/v2/Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI"
   );
@@ -45,16 +45,35 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
     contractABI,
     webprovider
   );
-
   const { isConnected, address } = useAccount();
-  const getEvent = async()=>{
+  const createProperty = async (smartContractId: Number) => {
+    var property = {
+      propertyTitle: propertyTitle,
+      propertyLocation: propertyLocation,
+      propertyCategory: category,
+      annualYield: 0,
+      units: Number(totalUnits),
+      price: Number(price),
+      propertyDescription: desc,
+      propertyOwner: address,
+      images: "string",
+      smartContractId: smartContractId,
+    };
+    let axResult = await axios.post(
+      "https://localhost:7280/properties",
+      property
+    );
+    console.log(axResult);
+  };
+  const getEvent = async () => {
     console.log("Inside the event function");
     contract.on("TokenListed", (owner, name, id) => {
       console.log(owner);
       console.log(name);
       console.log(id);
+      createProperty(Number(id));
     });
-  }
+  };
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault(); // Prevent default form submission
@@ -76,7 +95,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
           args: [
             propertyTitle,
             toBigInt(totalUnits),
-            toBigInt(Number(totalUnits) / 2),
+            toBigInt(Number(totalUnits)),
             Number(category),
           ],
         });
@@ -99,10 +118,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   );
 
   useEffect(() => {
-    console.log("UseEffect triggered");
     getEvent();
-   
-    console.log("Happend");
   }, [isTransactionLoading, isTransactionSuccess]);
 
   return (
@@ -240,6 +256,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                 <input
                   type="text"
                   defaultValue="100"
+                  value={totalUnits}
                   className="w-full bg-transparent border-none outline-none text-xs text-yellow-300 font-medium tracking-[0.01em] min-w-[21px]"
                   style={{ fontFamily: "inherit" }}
                   onChange={(e) => settotalUnits(e.target.value)}
@@ -254,6 +271,8 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                     <input
                       type="text"
                       defaultValue="20"
+                      value={exYield}
+                      onChange={(e) => setYield(Number(e.target.value))}
                       className="w-full bg-transparent border-none outline-none text-xs text-yellow-300 font-medium tracking-[0.01em] min-w-[15px]"
                       style={{ fontFamily: "inherit" }}
                     />
@@ -273,13 +292,15 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                     <input
                       type="text"
                       defaultValue="2000"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
                       className="w-full bg-transparent border-none outline-none text-xs text-blue-300 font-medium tracking-[0.01em] min-w-[15px]"
                       style={{ fontFamily: "inherit" }}
                     />
                   </div>
                   <div className="h-[41px] w-px absolute !m-[0] top-[11px] right-[83px] box-border z-[1] border-r-[1px] border-solid border-darkslategray-300" />
                   <div className="absolute !m-[0] top-[21px] right-[9px] text-base tracking-[0.01em] text-darkslategray-300 inline-block min-w-[43px] z-[1]">
-                    USDT
+                    ETH
                   </div>
                 </div>
               </div>
