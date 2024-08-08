@@ -68,9 +68,6 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   const getEvent = async () => {
     console.log("Inside the event function");
     contract.on("TokenListed", (owner, name, id) => {
-      console.log(owner);
-      console.log(name);
-      console.log(id);
       createProperty(Number(id));
     });
   };

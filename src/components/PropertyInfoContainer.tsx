@@ -2,78 +2,75 @@ import { FunctionComponent, useEffect, useState } from "react";
 import {
   useWaitForTransactionReceipt,
   useWriteContract,
-  useConnect,
   useAccount,
-  useTransactionReceipt,
-  useWatchContractEvent,
- 
+  useReadContract
+  //useTransactionReceipt,
 } from "wagmi";
 
 import { contractABI, contractAddress } from "../abi/EstatePool";
-import {  ethers, toBigInt } from "ethers";
+import { ethers, toBigInt } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 export type PropertyInfoContainerType = {
   className?: string;
   tokenId?: string;
-  nameOfAsset?:string;
+  nameOfAsset?: string;
 };
 
 const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
   className = "",
   tokenId,
-  nameOfAsset
+  nameOfAsset,
 }) => {
   const [amount, setAmount] = useState("");
   const [bidAmount, setbidAmount] = useState("");
   //const [shouldWatchEvent, setShouldWatchEvent] = useState(false);
   const { writeContract, data: hash } = useWriteContract();
-  const {address} = useAccount();
-  
+  const { address } = useAccount();
+
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
     useWaitForTransactionReceipt({
       hash,
     });
-    const reciept = useTransactionReceipt({
-      hash
+  // const reciept = useTransactionReceipt({
+  //   hash,
+  // });
+  const webprovider = new ethers.WebSocketProvider(
+    "wss://base-sepolia.g.alchemy.com/v2/Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI"
+  );
+  const contract = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    webprovider
+  );
+  const getEvent = async () => {
+    console.log("Inside the event function");
+    contract.on("AuctionCreated", (auctionId, creator, tokenId,amount) => {
+      console.log("Creator", creator);
+      console.log("tokenId", tokenId);
+      console.log("auction:", Number(auctionId));
+      console.log("amaount:",amount);
+      createAuction(Number(auctionId));
     });
-      const unwatch= useWatchContractEvent({
-       address: contractAddress,
-       abi: contractABI,
-       eventName: "AuctionCreated",
-       onLogs: (logs) => {
-         logs.forEach((log) => {
-           const { creator, amount } = log.args;
-           console.log("AuctionAsset result - creator:", creator);
-           console.log("AuctionAsset result - amount:", amount?.toString());
-         });
-       },
-     // enabled: shouldWatchEvent,
-     });
-    unwatch;
-    async function handleTransaction() {
-      if (isTransactionLoading) {
-        console.log("Transaction Loading");
-        toast("Transaction In Progress");
-      }
-      if (isTransactionSuccess) {
-        // Transaction is successful
-        console.log(reciept.data);
-        console.log(hash);
-        const axResult = await axios.post("https://localhost:7280/auction", {
-          id: 0,
-          nameOfAsset: nameOfAsset,
-          tokenId: tokenId,
-          initialBid: bidAmount,
-          owner: address,
-          tokenAmount:amount,
-        });
-        // Handle the response here (e.g., display success message)
-        console.log(axResult.data);
-        toast("Auction Successfully Made");
-      }
+  };
+  const createAuction = async (smartContractId: Number) => {
+    try {
+      const axResult = await axios.post("https://localhost:7280/auction", {
+        id: 0,
+        nameOfAsset: nameOfAsset,
+        tokenId: tokenId,
+        initialBid: bidAmount,
+        owner: address,
+        tokenAmount: amount,
+        smartContractId: smartContractId,
+      });
+      console.log(axResult.data);
+    } catch (error) {
+      toast("error on api")
     }
+  };
+
   const handleSubmit = async () => {
     try {
       const result = await writeContract({
@@ -88,13 +85,17 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
     }
   };
   useEffect(() => {
-    if (isTransactionSuccess) {
-      handleTransaction();
+    if (isTransactionLoading) {
+      getEvent();
+      console.log("Transaction Loading");
+      toast("Transaction In Progress");
     }
-  }, [
-    isTransactionLoading,
-    isTransactionSuccess
-  ]);
+    if (isTransactionSuccess) {
+      getEvent();
+      console.log(hash);
+      toast("Auction Successfully Made");
+    }
+  }, [isTransactionLoading, isTransactionSuccess]);
   return (
     <div
       className={`self-stretch flex flex-row items-start justify-start gap-[36px] max-w-full text-left text-lg text-black font-outfit mq750:gap-[18px] mq1225:flex-wrap ${className}`}
@@ -272,7 +273,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
             <div className="w-[0.5px] h-[45.5px] relative box-border border-r-[0.5px] border-solid border-gray-1200" />
           </div>
           <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
-            <div className="self-stretch relative">Acers</div>
+            <div className="self-stretch relative">Plots</div>
             <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 mq450:text-lgi mq450:leading-[32px]">
               500
             </div>
@@ -303,7 +304,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
             <div className="w-[0.5px] h-[45.5px] relative box-border border-r-[0.5px] border-solid border-gray-1200" />
           </div>
           <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
-            <div className="self-stretch relative">Acers</div>
+            <div className="self-stretch relative">Plots</div>
             <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 mq450:text-lgi mq450:leading-[32px]">
               500
             </div>
@@ -414,5 +415,3 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
 };
 
 export default PropertyInfoContainer;
-
-

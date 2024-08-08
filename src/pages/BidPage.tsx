@@ -1,33 +1,44 @@
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
-import { useWriteContract, useWaitForTransactionReceipt,useAccount} from "wagmi";
+import {
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useAccount,
+} from "wagmi";
 import { contractABI, contractAddress } from "../abi/EstatePool";
-import {useNavigate, useParams} from 'react-router-dom'
+import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { parseEther, parseUnits } from "ethers";
-
-//import { Address } from "@coinbase/onchainkit/identity";
+import { parseUnits } from "ethers";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { Auction } from "../utils/interfaces/interfaces";
+import { off } from "process";
 const BidScreen: FunctionComponent = () => {
-  const onFrameContainerClick = useCallback(() => {
-    // Please sync "CONNECTED WALLET" to the project
-  }, []);
-
   const onFrameContainerClick1 = useCallback(() => {
     // Please sync "Auction Screen/analytics" to the project
   }, []);
-  const [offer, setoffer] = useState("");
+  const [offer, setoffer] = useState<string>("");
   const { writeContract, data: hash } = useWriteContract();
-  const {address} = useAccount();
-  const {auctionId} = useParams();
+  const { address } = useAccount();
+  const { auctionId } = useParams();
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
     useWaitForTransactionReceipt({
       hash,
     });
+    const { data:auction } = useQuery<Auction>({
+      queryKey: ["getAuctionById"],
+      queryFn: async () => {
+        const axRresult = await axios.get<Auction>(
+          `https://localhost:7280/auction/byId/${auctionId}`
+        );
+        setoffer(axRresult.data.initialBid)
+        return axRresult.data;
+      },
+    });
+   
+     
   const navigate = useNavigate();
-const handleSubmit = async () => {
-  console.log(offer);
-  toast("Success");
- 
-  
+  const handleSubmit = async () => {
+    console.log(offer);
     const result = await writeContract({
       address: contractAddress,
       abi: contractABI,
@@ -35,26 +46,27 @@ const handleSubmit = async () => {
       args: [BigInt(Number(auctionId)), parseUnits(offer, "ether")],
       value: parseUnits(offer, "ether"),
     });
-};
- 
+  };
+
   useEffect(() => {
     if (isTransactionLoading) {
       toast("Transaction In progress");
     }
     if (isTransactionSuccess) {
-     toast("Bid completed Successfully")
+      toast("Bid completed Successfully");
       setTimeout(() => {
         navigate(`/myassets/${address}`);
       }, 5000);
     }
-    if (!isTransactionSuccess) {
-      toast("Bid failed: Make sure you pay the right amount")
+    if (!isTransactionSuccess && !isTransactionLoading) {
+      toast("Bid failed: Make sure you pay the right amount");
     }
-  }, [isTransactionSuccess]);
+  }, [isTransactionLoading,isTransactionSuccess]);
 
   return (
     <div className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[165px] box-border gap-[649px] leading-[normal] tracking-[normal] text-left text-sm text-white-base font-outfit mq450:gap-[162px] mq450:pl-5 mq450:pr-5 mq450:box-border mq750:gap-[324px] mq750:pl-[74px] mq750:pr-[74px] mq750:box-border mq1225:h-auto">
       <Toaster />
+      
       <main className="self-stretch flex flex-row items-start justify-start py-0 pr-[29px] pl-[30px] box-border max-w-full shrink-0">
         <section className="flex-1 flex flex-col items-start justify-start gap-[30px] shrink-0 max-w-full text-left text-lg text-black font-outfit">
           {/* <header className="self-stretch shadow-[2px_4px_30px_#e9eefd] rounded-[61px] bg-white-base flex flex-row items-start justify-start p-3 box-border gap-[48.5px] top-[0] z-[99] sticky max-w-full text-left text-5xl text-ntblack font-outfit mq750:gap-[24px]">
@@ -344,11 +356,11 @@ const handleSubmit = async () => {
                   <div className="flex flex-col items-start justify-end pt-0 px-0 pb-[3.5px] text-black dark:text-white">
                     <input
                       type="text"
-                      defaultValue="2000"
-                      value={offer}
-                      onChange={(e) => {
-                        setoffer(e.target.value);
-                      }}
+                      defaultValue={offer}
+                      disabled={true}
+                      // onChange={(e) => {
+                      //   setoffer(e.target.value);
+                      // }}
                       className="relative tracking-[0.01em] min-w-[62px] mq450:text-lgi text-black dark:text-white border-none focus:outline-none focus:ring-0 font-inherit text-inherit"
                     />
                   </div>
@@ -421,4 +433,3 @@ const handleSubmit = async () => {
 };
 
 export default BidScreen;
-
