@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import {PropertyType} from "../utils/interfaces/interfaces"
+import { Link } from "react-router-dom";
 const PropertyManagersProps: FunctionComponent = () => {
   
   const onListButtonClick = useCallback(() => {
@@ -215,14 +216,14 @@ const PropertyManagersProps: FunctionComponent = () => {
                             </div>
                           </div>
                         </div>
-                        <button
+                        <Link to={`/publish`}
                           className="cursor-pointer py-[7px] px-[18px] bg-[transparent] w-[143px] rounded-11xl [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] box-border flex flex-row items-center justify-center whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-skyblue-200 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue-100"
-                          onClick={onListButtonClick}
+                        
                         >
                           <div className="relative text-base font-outfit text-white-base text-left inline-block min-w-[103px]">
                             List Properties
                           </div>
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

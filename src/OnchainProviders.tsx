@@ -1,11 +1,10 @@
 import { ReactNode } from "react";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { baseSepolia } from "viem/chains";
+import { baseSepolia,sepolia } from "viem/chains";
 import { WagmiProvider,http } from "wagmi";
 import {
   RainbowKitProvider,
-  connectorsForWallets,
   getDefaultConfig,
 } from "@rainbow-me/rainbowkit";
 import {

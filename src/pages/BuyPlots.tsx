@@ -1,12 +1,18 @@
-import { FormEvent, FunctionComponent, useCallback, useState } from "react";
+import { FormEvent, FunctionComponent, useCallback, useEffect, useState } from "react";
 import ExploreNavBar from "../components/ExploreNavBar";
 import { contractABI, contractAddress } from "../abi/EstatePool";
 import { useNavigate, useParams } from "react-router-dom";
-import { useReadContract, useWriteContract, useAccount } from "wagmi";
+import {
+  useReadContract,
+  useWriteContract,
+  useAccount,
+  useWaitForTransactionReceipt,
+ } from "wagmi";
 import { parseEther, toBigInt, parseUnits } from "ethers";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { PropertyType } from "../utils/interfaces/interfaces";
+import toast,{Toaster} from "react-hot-toast";
 const BuyPlots: FunctionComponent = () => {
   const [plotAmount, setplotAmount] = useState(0);
   const [priceSize, setPriceSize] = useState(0);
@@ -31,7 +37,23 @@ const BuyPlots: FunctionComponent = () => {
   const { isConnected, address } = useAccount();
   const { writeContract, data:hash } = useWriteContract();
   const navigate = useNavigate();
+const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
+  useWaitForTransactionReceipt({
+    hash,
+  });
 
+  useEffect(() => {
+    if (isTransactionLoading) {
+      toast("Loading...")
+    }
+   if (isTransactionSuccess) {
+    setTimeout(() => {
+      navigate(`/overview/${address}`);
+    }, 5000);
+      
+   }
+  }, [isTransactionLoading,isTransactionSuccess])
+  
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -53,7 +75,7 @@ const BuyPlots: FunctionComponent = () => {
             value: parseUnits((plotAmount * price).toString(), "ether"),
           });
       // }, 10);
-        navigate(`/overview/${address}`);
+        
       } catch (error) {
         console.error("Error in writeContract:", error);
       }
@@ -66,6 +88,7 @@ const BuyPlots: FunctionComponent = () => {
       onSubmit={handleSubmit}
       className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[175px] box-border gap-[659px] leading-[normal] tracking-[normal] mq800:gap-[329px] mq800:pl-[74px] mq800:pr-[74px] mq800:box-border mq450:gap-[165px] mq450:pl-5 mq450:pr-5 mq450:box-border mq1350:h-auto"
     >
+      <Toaster/>
       <main className="self-stretch flex flex-row items-start justify-start py-0 pr-7 pl-[30px] box-border max-w-full shrink-0">
         <section className="flex-1 flex flex-col items-start justify-start gap-[23px] shrink-0 max-w-full text-left text-lg text-black font-outfit">
           <ExploreNavBar />

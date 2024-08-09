@@ -16,6 +16,7 @@ import { ethers, toBigInt } from "ethers";
 import axios from "axios";
 import { contractABI, contractAddress } from "../abi/EstatePool";
 import toast, { Toaster } from "react-hot-toast";
+
 export type PublishPropertyFormType = {
   className?: string;
 };
@@ -26,11 +27,11 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   const [propertyTitle, setPropertyTitle] = useState("");
   const [propertyLocation, setPropertyLocation] = useState("");
   const [desc, setDesc] = useState("");
-  const [totalUnits, settotalUnits] = useState("1000");
+  const [totalUnits, settotalUnits] = useState("100");
   const [category, setCategory] = useState("0");
   const [price, setPrice] = useState("0");
   const [exYield, setYield] = useState(0);
-
+  const [apiResp,setApiResp]=useState(false)
   const { writeContract, data: hash } = useWriteContract();
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
     useWaitForTransactionReceipt({
@@ -59,14 +60,17 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
       images: "string",
       smartContractId: smartContractId,
     };
+
     let axResult = await axios.post(
       "https://localhost:7280/properties",
       property
     );
     console.log(axResult);
+    if ((axResult.status = 201)) {
+       setApiResp(true);
+    }
   };
   const getEvent = async () => {
-    console.log("Inside the event function");
     contract.on("TokenListed", (owner, name, id) => {
       createProperty(Number(id));
     });
@@ -83,7 +87,6 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
 
       try {
         console.log("Connected address:", address);
-
         // Call the smart contract function
         writeContract({
           address: contractAddress,
@@ -109,6 +112,8 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
       desc,
       totalUnits,
       category,
+      exYield,
+      price,
       writeContract,
       navigate,
     ]
@@ -117,6 +122,12 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   useEffect(() => {
     getEvent();
   }, [isTransactionLoading, isTransactionSuccess]);
+
+    useEffect(() => {
+      if (apiResp) {
+        navigate(`/overview/${address}`);
+      }
+    }, [apiResp]);
 
   return (
     <form
@@ -252,7 +263,6 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
               <div className="self-stretch rounded-3xs bg-dimgray flex flex-row items-center justify-start py-[23px] px-4 text-xs border-[1px] border-solid border-whitesmoke-200">
                 <input
                   type="text"
-                  defaultValue="100"
                   value={totalUnits}
                   className="w-full bg-transparent border-none outline-none text-xs text-yellow-300 font-medium tracking-[0.01em] min-w-[21px]"
                   style={{ fontFamily: "inherit" }}
@@ -267,7 +277,6 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                   <div className="flex-1 rounded-3xs bg-dimgray flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
                     <input
                       type="text"
-                      defaultValue="20"
                       value={exYield}
                       onChange={(e) => setYield(Number(e.target.value))}
                       className="w-full bg-transparent border-none outline-none text-xs text-yellow-300 font-medium tracking-[0.01em] min-w-[15px]"
@@ -288,7 +297,6 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                   <div className="flex-1 rounded-3xs bg-dimgray flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
                     <input
                       type="text"
-                      defaultValue="2000"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
                       className="w-full bg-transparent border-none outline-none text-xs text-blue-300 font-medium tracking-[0.01em] min-w-[15px]"
