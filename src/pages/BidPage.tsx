@@ -28,7 +28,7 @@ const BidScreen: FunctionComponent = () => {
     queryKey: ["getAuctionById"],
     queryFn: async () => {
       const axRresult = await axios.get<Auction>(
-        `https://localhost:7280/auction/byId/${auctionId}`
+        `https://on-real.fly.dev/auction/byId/${auctionId}`
       );
       setoffer("0.1");
       return axRresult.data;
@@ -38,7 +38,7 @@ const BidScreen: FunctionComponent = () => {
   const navigate = useNavigate();
   const completeAuction = async () => {
     const axResponse = await axios.post(
-      `https://localhost:7280/payBid?auctionId=${auctionId}`,
+      `https://on-real.fly.dev/payBid?auctionId=${auctionId}`
     );
     console.log(axResponse);
   };

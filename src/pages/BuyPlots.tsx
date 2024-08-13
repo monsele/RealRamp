@@ -21,7 +21,9 @@ const BuyPlots: FunctionComponent = () => {
   const { data } = useQuery({
     queryKey: ["getPropertyBySmartId"],
     queryFn: async () => {
-      const { data } = await axios.get(`https://localhost:7280/getbysmartId/${tokenId}`);
+      const { data } = await axios.get(
+        `https://on-real.fly.dev/getbysmartId/${tokenId}`
+      );
       setprice(data.price);
       return data as PropertyType;
     },

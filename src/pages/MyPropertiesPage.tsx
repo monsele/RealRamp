@@ -17,7 +17,7 @@ const PropertyManagersProps: FunctionComponent = () => {
     queryKey: ["fore"],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://localhost:7280/PropertiesByOwner/${address}`
+        `https://on-real.fly.dev/PropertiesByOwner/${address}`
       );
       return data as PropertyType[];
     },

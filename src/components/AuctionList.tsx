@@ -14,7 +14,7 @@ const AuctionList: FunctionComponent<AuctionListType> = ({
   const { data } = useQuery({
     queryKey: ["getProperties"],
     queryFn: async () => {
-      const { data } = await axios.get(`https://localhost:7280/properties`);
+      const { data } = await axios.get(`https://on-real.fly.dev/properties`);
       return data as PropertyType[];
     },
   });

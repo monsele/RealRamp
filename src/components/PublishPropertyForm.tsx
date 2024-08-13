@@ -63,7 +63,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
     };
    console.log(property)
     let axResult = await axios.post(
-      "https://localhost:7280/properties",
+      "https://on-real.fly.dev/properties",
       property
     );
     console.log(axResult);

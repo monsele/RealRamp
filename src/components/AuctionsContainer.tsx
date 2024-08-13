@@ -15,22 +15,12 @@ const AuctionsContainer: FunctionComponent<AuctionsContainerType> = ({
   const { data } = useQuery({
     queryKey: ["getAuctions"],
     queryFn: async () => {
-      const { data } = await axios.get(`https://localhost:7280/auction`);
+      const { data } = await axios.get(`https://on-real.fly.dev/auction`);
       return data as Auction[];
     },
   });
 
   console.log(data);
-  //  const result = useReadContract({
-  //    abi: contractABI,
-  //    address: contractAddress,
-  //    functionName: "GetListedTokens",
-  //    args: [],
-  //  });
-  // useEffect(() => {
-  //   setfirst(result);
-  // }, [])
-  //  console.log(result.data);
   return (
     <section
       className={`w-[1108px] flex flex-row flex-wrap items-start justify-start gap-[57px_18.7px] min-h-[733px] max-w-full text-left text-base text-ntblack font-outfit ${className}`}

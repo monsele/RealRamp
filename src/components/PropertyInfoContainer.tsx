@@ -67,7 +67,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
   };
   const createAuction = async (smartContractId: Number) => {
     try {
-      const axResult = await axios.post("https://localhost:7280/auction", {
+      const axResult = await axios.post("https://on-real.fly.dev/auction", {
         id: 0,
         nameOfAsset: nameOfAsset,
         tokenId: tokenId,
