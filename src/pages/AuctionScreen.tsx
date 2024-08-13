@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 const AuctionScreen: FunctionComponent = () => {
   const { tokenId, name } = useParams();
-  console.log(tokenId, name);
 
   return (
     <div className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[165px] box-border gap-[649px] leading-[normal] tracking-[normal] text-left text-sm text-white-base font-outfit mq450:gap-[162px] mq450:pl-5 mq450:pr-5 mq450:box-border mq750:gap-[324px] mq750:pl-[74px] mq750:pr-[74px] mq750:box-border mq1225:h-auto">

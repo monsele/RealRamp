@@ -11,7 +11,7 @@ import { parseUnits } from "ethers";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Auction } from "../utils/interfaces/interfaces";
-import { off } from "process";
+
 const BidScreen: FunctionComponent = () => {
   const onFrameContainerClick1 = useCallback(() => {
     // Please sync "Auction Screen/analytics" to the project
@@ -24,49 +24,56 @@ const BidScreen: FunctionComponent = () => {
     useWaitForTransactionReceipt({
       hash,
     });
-    const { data:auction } = useQuery<Auction>({
-      queryKey: ["getAuctionById"],
-      queryFn: async () => {
-        const axRresult = await axios.get<Auction>(
-          `https://localhost:7280/auction/byId/${auctionId}`
-        );
-        setoffer(axRresult.data.initialBid)
-        return axRresult.data;
-      },
-    });
-   
-     
+  const { data: auction } = useQuery<Auction>({
+    queryKey: ["getAuctionById"],
+    queryFn: async () => {
+      const axRresult = await axios.get<Auction>(
+        `https://localhost:7280/auction/byId/${auctionId}`
+      );
+      setoffer("0.1");
+      return axRresult.data;
+    },
+  });
+
   const navigate = useNavigate();
-  const handleSubmit = async () => {
+  const completeAuction = async () => {
+    const axResponse = await axios.post(
+      `https://localhost:7280/payBid?auctionId=${auctionId}`,
+    );
+    console.log(axResponse);
+  };
+  const handleSubmit = useCallback( () => {
     console.log(offer);
-    const result = await writeContract({
+    
+     writeContract({
       address: contractAddress,
       abi: contractABI,
       functionName: "PayBid",
       args: [BigInt(Number(auctionId)), parseUnits(offer, "ether")],
       value: parseUnits(offer, "ether"),
     });
-  };
+  }, [writeContract, offer, isTransactionLoading, isTransactionSuccess]);
 
   useEffect(() => {
     if (isTransactionLoading) {
       toast("Transaction In progress");
     }
     if (isTransactionSuccess) {
+      completeAuction();
       toast("Bid completed Successfully");
       setTimeout(() => {
         navigate(`/myassets/${address}`);
-      }, 5000);
+      }, 3000);
     }
     if (!isTransactionSuccess && !isTransactionLoading) {
       toast("Bid failed: Make sure you pay the right amount");
     }
-  }, [isTransactionLoading,isTransactionSuccess]);
+  }, [isTransactionLoading, isTransactionSuccess]);
 
   return (
     <div className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[165px] box-border gap-[649px] leading-[normal] tracking-[normal] text-left text-sm text-white-base font-outfit mq450:gap-[162px] mq450:pl-5 mq450:pr-5 mq450:box-border mq750:gap-[324px] mq750:pl-[74px] mq750:pr-[74px] mq750:box-border mq1225:h-auto">
       <Toaster />
-      
+
       <main className="self-stretch flex flex-row items-start justify-start py-0 pr-[29px] pl-[30px] box-border max-w-full shrink-0">
         <section className="flex-1 flex flex-col items-start justify-start gap-[30px] shrink-0 max-w-full text-left text-lg text-black font-outfit">
           {/* <header className="self-stretch shadow-[2px_4px_30px_#e9eefd] rounded-[61px] bg-white-base flex flex-row items-start justify-start p-3 box-border gap-[48.5px] top-[0] z-[99] sticky max-w-full text-left text-5xl text-ntblack font-outfit mq750:gap-[24px]">

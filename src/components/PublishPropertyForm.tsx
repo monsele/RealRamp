@@ -31,7 +31,8 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
   const [category, setCategory] = useState("0");
   const [price, setPrice] = useState("0");
   const [exYield, setYield] = useState(0);
-  const [apiResp,setApiResp]=useState(false)
+  const [apiResp, setApiResp]=useState(false);
+  const [tokenId, setTokenId] = useState<number | null>(0);
   const { writeContract, data: hash } = useWriteContract();
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
     useWaitForTransactionReceipt({
@@ -47,12 +48,12 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
     webprovider
   );
   const { isConnected, address } = useAccount();
-  const createProperty = async (smartContractId: Number) => {
+  const createProperty = async (smartContractId: Number | null) => {
     var property = {
       propertyTitle: propertyTitle,
       propertyLocation: propertyLocation,
       propertyCategory: category,
-      annualYield: 0,
+      annualYield: exYield,
       units: Number(totalUnits),
       price: Number(price),
       propertyDescription: desc,
@@ -60,19 +61,26 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
       images: "string",
       smartContractId: smartContractId,
     };
-
+   console.log(property)
     let axResult = await axios.post(
       "https://localhost:7280/properties",
       property
     );
     console.log(axResult);
     if ((axResult.status = 201)) {
-       setApiResp(true);
+      toast.success("Asset Published Successfully")
+      setTimeout(() => {
+        navigate(`/myAssets/${address}`);
+      }, 5000);
+      return;
     }
+    toast.error("Publishing failed");
   };
   const getEvent = async () => {
+    console.log();
+    
     contract.on("TokenListed", (owner, name, id) => {
-      createProperty(Number(id));
+      setTokenId(Number(id));
     });
   };
   const handleSubmit = useCallback(
@@ -116,18 +124,28 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
       price,
       writeContract,
       navigate,
+      apiResp
     ]
   );
 
   useEffect(() => {
     getEvent();
+    if (isTransactionLoading) {
+      toast("Loading");
+    }
   }, [isTransactionLoading, isTransactionSuccess]);
 
-    useEffect(() => {
-      if (apiResp) {
-        navigate(`/overview/${address}`);
+    // useEffect(() => {
+    //   if (apiResp) {
+    //     navigate(`/myAssets/${address}`);
+    //   }
+    // }, [apiResp]);
+     useEffect(() => {
+      if (tokenId==0) {
+        return;
       }
-    }, [apiResp]);
+      createProperty(tokenId);
+     }, [tokenId]);
 
   return (
     <form

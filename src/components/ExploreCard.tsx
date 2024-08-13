@@ -68,7 +68,7 @@ const ExploreCard: FunctionComponent<ExploreCardType> = ({
           <div className="h-[20.5px] w-[0.5px] relative box-border border-r-[0.5px] border-solid border-gray-600" />
           <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
             <div className="relative font-medium inline-block min-w-[74px]">
-              {result.data?.toString()} Plots
+              {result?.data?.toString()} Plots
             </div>
           </div>
         </div>

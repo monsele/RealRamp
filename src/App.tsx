@@ -62,7 +62,7 @@ function App() {
         <Route path="/bid/:auctionId" element={<BidScreen />} />
         <Route path="/properties" element={<MyPropertiesPage />} />
         <Route path="/buyPlot/:tokenId" element={<BuyPlots />} />
-        <Route path="/connect" element={<AuctionPage />} />
+        <Route path="/auctions" element={<AuctionPage />} />
         <Route path="/myassets/:address" element={<MyAssetPage />} />
       </Routes>
     </OnchainProviders>

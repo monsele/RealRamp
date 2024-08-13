@@ -11,10 +11,10 @@ import { contractABI, contractAddress } from "../abi/EstatePool";
 import { ethers, toBigInt } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,  } from "react-router-dom";
 export type PropertyInfoContainerType = {
   className?: string;
-  tokenId?: string;
+  tokenId: string;
   nameOfAsset?: string;
 };
 
@@ -25,20 +25,29 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
 }) => {
   const [amount, setAmount] = useState("");
   const [bidAmount, setbidAmount] = useState("");
-  //const [shouldWatchEvent, setShouldWatchEvent] = useState(false);
+  const [apiResp, setApiResp] = useState(false);
+  
   const { writeContract, data: hash } = useWriteContract();
   const { address } = useAccount();
+  const navigate = useNavigate();
 
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
     useWaitForTransactionReceipt({
       hash,
     });
-  // const reciept = useTransactionReceipt({
-  //   hash,
-  // });
+     const result = useReadContract({
+       abi: contractABI,
+       address: contractAddress,
+       functionName: "balanceOf",
+       args: [`0x${address?.slice(2)}`, BigInt(tokenId)],
+     });
+     console.log(Number(result.data));
   const webprovider = new ethers.WebSocketProvider(
     "wss://base-sepolia.g.alchemy.com/v2/Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI"
   );
+  // const webprovider = new ethers.WebSocketProvider(
+  //   "https://polygon-amoy.infura.io/v3/3d846378caf040a899cd9d014a5741f7"
+  // );
   const contract = new ethers.Contract(
     contractAddress,
     contractABI,
@@ -47,11 +56,13 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
   const getEvent = async () => {
     console.log("Inside the event function");
     contract.on("AuctionCreated", (auctionId, creator, tokenId,amount) => {
+      console.log("I got here");
       console.log("Creator", creator);
       console.log("tokenId", tokenId);
       console.log("auction:", Number(auctionId));
-      console.log("amaount:",amount);
+      console.log("amount:",amount);
       createAuction(Number(auctionId));
+      //setApiResp(true);
     });
   };
   const createAuction = async (smartContractId: Number) => {
@@ -66,6 +77,9 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
         smartContractId: smartContractId,
       });
       console.log(axResult.data);
+      if ((axResult.status = 201)) {
+        setApiResp(true);
+      }
     } catch (error) {
       toast("error on api")
     }
@@ -84,6 +98,11 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
       console.error("Error submitting transaction:", error);
     }
   };
+      useEffect(() => {
+        if (apiResp) {
+          navigate(`/overview/${address}`);
+        }
+      }, [apiResp]);
   useEffect(() => {
     if (isTransactionLoading) {
       getEvent();
@@ -260,7 +279,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
             </div>
           </div>
         </div>
-        <div className="self-stretch flex flex-row items-start justify-start gap-[15.7px] text-sm mq450:flex-wrap">
+        {/* <div className="self-stretch flex flex-row items-start justify-start gap-[15.7px] text-sm mq450:flex-wrap">
           <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
             <div className="relative inline-block min-w-[112.7px]">
               Purchased Value
@@ -275,7 +294,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
           <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
             <div className="self-stretch relative">Plots</div>
             <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 mq450:text-lgi mq450:leading-[32px]">
-              500
+              {Number(result?.data)}
             </div>
           </div>
           <div className="flex flex-col items-start justify-start pt-[8.5px] px-0 pb-0">
@@ -287,7 +306,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
               20%
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="self-stretch h-[0.6px] flex flex-row items-start justify-start py-0 px-4 box-border max-w-full">
           <div className="self-stretch flex-1 relative box-border max-w-full border-t-[0.6px] border-solid border-gray-1200" />
         </div>
@@ -306,7 +325,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
           <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
             <div className="self-stretch relative">Plots</div>
             <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 mq450:text-lgi mq450:leading-[32px]">
-              500
+              {Number(result?.data)}
             </div>
           </div>
           <div className="flex flex-col items-start justify-start pt-[8.5px] px-0 pb-0">

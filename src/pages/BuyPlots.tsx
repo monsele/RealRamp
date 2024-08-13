@@ -27,7 +27,7 @@ const BuyPlots: FunctionComponent = () => {
     },
   });
 
-  console.log(data);
+  //console.log(data);
   const result = useReadContract({
     abi: contractABI,
     address: contractAddress,
@@ -88,7 +88,7 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
       onSubmit={handleSubmit}
       className="w-full h-[1024px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start pt-[39px] px-[149px] pb-[175px] box-border gap-[659px] leading-[normal] tracking-[normal] mq800:gap-[329px] mq800:pl-[74px] mq800:pr-[74px] mq800:box-border mq450:gap-[165px] mq450:pl-5 mq450:pr-5 mq450:box-border mq1350:h-auto"
     >
-      <Toaster/>
+      <Toaster />
       <main className="self-stretch flex flex-row items-start justify-start py-0 pr-7 pl-[30px] box-border max-w-full shrink-0">
         <section className="flex-1 flex flex-col items-start justify-start gap-[23px] shrink-0 max-w-full text-left text-lg text-black font-outfit">
           <ExploreNavBar />
@@ -297,7 +297,7 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                     <div className="w-32 rounded-3xs bg-dimgray-200 box-border flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
                       <input
                         type="text"
-                        defaultValue="100"
+                        //defaultValue="100"
                         value={plotAmount}
                         className="w-full bg-transparent border-none outline-none text-black text-xs tracking-[0.01em]"
                         onChange={(e) => setplotAmount(Number(e.target.value))}
@@ -307,8 +307,8 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                       <div className="flex-1 rounded-3xs bg-dimgray-200 flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
                         <input
                           type="text"
-                          defaultValue="2000"
-                          value={plotAmount*price}
+                          defaultValue={plotAmount * price}
+                          //value={plotAmount*price}
                           //onChange={() => setPriceSize(plotAmount * price)}
                           className="w-full bg-transparent border-none outline-none text-black text-xs tracking-[0.01em]"
                         />
