@@ -4,7 +4,6 @@ pragma solidity >=0.8.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
-
 contract EstatePool is ERC1155, ERC1155Holder, ERC1155Receiver {
 	//////////////////
 	/////ERRORS/////

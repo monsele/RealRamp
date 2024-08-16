@@ -57,7 +57,6 @@ const BidScreen: FunctionComponent = () => {
       args: [toBigInt(Number(smartId)), parseUnits(offer,"ether")],
       value: parseUnits(offer,"ether"),
     });
-    console.log(result);
     
   }, [writeContract, offer, isTransactionLoading, isTransactionSuccess]);
 
