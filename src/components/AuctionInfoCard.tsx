@@ -1,32 +1,34 @@
 import { FunctionComponent } from "react";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { useReadContract } from "wagmi";
 import { contractABI, contractAddress } from "../abi/EstatePool";
 import { toBigInt, formatUnits } from "ethers";
-export type ExploreCardType = {
+export type AuctionInfoCardType = {
   className?: string;
   propertyTitle: string;
-  propertyLocation: string;
+  propertyLocation?: string;
   plots?: string;
   price: Number;
-  smartContractId:Number;
+  smartContractId: Number;
+  auctionId:string;
 };
 
-const ExploreCard: FunctionComponent<ExploreCardType> = ({
+const AuctionInfoCard: FunctionComponent<AuctionInfoCardType> = ({
   className = "",
   propertyTitle,
   plots,
   price,
   propertyLocation,
-  smartContractId
+  smartContractId,
+  auctionId,
 }) => {
-   const result = useReadContract({
-     abi: contractABI,
-     address: contractAddress,
-     functionName: "availaibleTokenAmount",
-     args: [toBigInt(smartContractId.toString())],
-   });
-   console.log(result.data);
+  const result = useReadContract({
+    abi: contractABI,
+    address: contractAddress,
+    functionName: "auction",
+    args: [toBigInt(auctionId)],
+  });
+  console.log(result.data);
   return (
     <div
       className={`w-[262px] shadow-[2px_4px_30px_#e9eefd] rounded-3xs bg-white-base flex flex-col items-start justify-start pt-0 px-0 pb-3 box-border gap-[16px] text-left text-base text-ntblack font-outfit ${className}`}
@@ -54,21 +56,19 @@ const ExploreCard: FunctionComponent<ExploreCardType> = ({
           <div className="self-stretch relative font-semibold">
             {propertyTitle}
           </div>
-          <div className="self-stretch relative text-sm text-gray-500">
-            {propertyLocation}
-          </div>
+          <div className="self-stretch relative text-sm text-gray-500"></div>
         </div>
         <div className="h-5 flex flex-row items-start justify-start py-0 pr-7 pl-0 box-border gap-[19.8px] text-sm">
           <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
             <div className="relative font-medium inline-block min-w-[84px]">
               <span>{price.toString()}</span>
-              <span className="text-xs text-gray-500">MIN</span>
+              <span className="text-xs text-gray-500"> BID </span>
             </div>
           </div>
           <div className="h-[20.5px] w-[0.5px] relative box-border border-r-[0.5px] border-solid border-gray-600" />
           <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
             <div className="relative font-medium inline-block min-w-[74px]">
-              {result?.data?.toString()} Plots
+              {plots} Plots
             </div>
           </div>
         </div>
@@ -76,10 +76,10 @@ const ExploreCard: FunctionComponent<ExploreCardType> = ({
       <div className="flex flex-row items-start justify-start py-0 px-[78px] mq450:pl-5 mq450:pr-5 mq450:box-border">
         <div className="rounded-11xl flex flex-row items-start justify-start py-2 px-6">
           <Link
-            to={`/buyPlot/${smartContractId}`}
+            to={`/bid/${smartContractId}`}
             className="relative font-semibold text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] inline-block min-w-[57px]"
           >
-            Buy
+            Join Bid
           </Link>
         </div>
       </div>
@@ -87,4 +87,4 @@ const ExploreCard: FunctionComponent<ExploreCardType> = ({
   );
 };
 
-export default ExploreCard;
+export default AuctionInfoCard;

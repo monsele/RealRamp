@@ -1,20 +1,34 @@
-import { FunctionComponent, useCallback } from "react";
-
-export type FrameComponent1Type = {
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
+import { WalletComponents } from "./Login";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { Link } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+export type ExploreNavBarType = {
   className?: string;
 };
 
-const FrameComponent1: FunctionComponent<FrameComponent1Type> = ({
+const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
   className = "",
 }) => {
   const onActionButtonsContainerClick = useCallback(() => {
     // Please sync "CONNECTED WALLET" to the project
   }, []);
+  const { isConnected, address } = useAccount();
+
+  useEffect(() => {
+    if (isConnected) {
+      toast("User Connected");
+      console.log(address);
+      return;
+    }
+  }, [isConnected]);
 
   return (
     <div
       className={`w-[1195px] flex flex-col items-start justify-start gap-[13px] top-[0] z-[99] sticky max-w-full text-left text-sm text-gray-500 font-outfit ${className}`}
     >
+      <Toaster />
       <header className="self-stretch shadow-[2px_4px_30px_#e9eefd] rounded-42xl bg-white-base flex flex-row items-start justify-between p-3 box-border max-w-full gap-[20px] text-left text-5xl text-ntblack font-outfit">
         <div className="w-[297px] flex flex-col items-start justify-start pt-[3px] px-0 pb-0 box-border">
           <div className="self-stretch flex flex-row items-start justify-start py-0 px-4 gap-[42px] mq450:gap-[21px]">
@@ -66,19 +80,23 @@ const FrameComponent1: FunctionComponent<FrameComponent1Type> = ({
               <div className="self-stretch relative font-medium">Explore</div>
             </div>
             <div className="rounded-11xl flex flex-row items-start justify-start py-2.5 px-5">
-              <a className="[text-decoration:none] relative font-medium text-[inherit] inline-block min-w-[103px] whitespace-nowrap">
+              <Link
+                to="/publish"
+                className="[text-decoration:none] relative font-medium text-[inherit] inline-block min-w-[103px] whitespace-nowrap"
+              >
                 List properties
-              </a>
+              </Link>
             </div>
-            <button className="cursor-pointer py-[7px] px-[18px] bg-ntblack w-[83px] rounded-11xl box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
+            <ConnectButton label="Login" />
+            {/* <button className="cursor-pointer py-[7px] px-[18px] bg-ntblack w-[83px] rounded-11xl box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
               <a className="[text-decoration:none] relative text-base font-outfit text-white-base text-left inline-block min-w-[43px]">
                 Log in
               </a>
-            </button>
+            </button> */}
           </div>
         </div>
       </header>
-      <div className="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
+      {/* <div className="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <div className="w-[515px] flex flex-row items-start justify-between gap-[20px] max-w-full mq450:hidden">
           <div className="rounded-11xl flex flex-row items-start justify-start py-2.5 px-5">
             <a className="[text-decoration:none] relative font-medium text-[inherit] inline-block min-w-[38px]">
@@ -101,9 +119,9 @@ const FrameComponent1: FunctionComponent<FrameComponent1Type> = ({
             </a>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
 
-export default FrameComponent1;
+export default ExploreNavBar;

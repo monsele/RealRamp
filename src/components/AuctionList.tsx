@@ -3,11 +3,11 @@ import ExploreCard from "./ExploreCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from 'axios'
 import { PropertyType } from "../utils/interfaces/interfaces";
-export type ListingsContainerType = {
+export type AuctionListType = {
   className?: string;
 };
 
-const ListingsContainer: FunctionComponent<ListingsContainerType> = ({
+const AuctionList: FunctionComponent<AuctionListType> = ({
   className = "",
 }) => {
   //const {queryKey} = useReadContract();
@@ -18,6 +18,7 @@ const ListingsContainer: FunctionComponent<ListingsContainerType> = ({
       return data as PropertyType[];
     },
   });
+  
  console.log(data);
 //  const result = useReadContract({
 //    abi: contractABI,
@@ -47,4 +48,4 @@ const ListingsContainer: FunctionComponent<ListingsContainerType> = ({
   );
 };
 
-export default ListingsContainer;
+export default AuctionList;
