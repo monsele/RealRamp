@@ -309,8 +309,8 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                       <div className="flex-1 rounded-3xs bg-dimgray-200 flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
                         <input
                           type="text"
-                          defaultValue={plotAmount * price}
-                          //value={plotAmount*price}
+                         // defaultValue={plotAmount * price}
+                          value={plotAmount*price}
                           //onChange={() => setPriceSize(plotAmount * price)}
                           className="w-full bg-transparent border-none outline-none text-black text-xs tracking-[0.01em]"
                         />

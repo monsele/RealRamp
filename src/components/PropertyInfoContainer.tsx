@@ -48,6 +48,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
   // const webprovider = new ethers.WebSocketProvider(
   //   "https://polygon-amoy.infura.io/v3/3d846378caf040a899cd9d014a5741f7"
   // );
+  
   const contract = new ethers.Contract(
     contractAddress,
     contractABI,
@@ -78,6 +79,8 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
       });
       console.log(axResult.data);
       if ((axResult.status = 201)) {
+        console.log("Called api");
+        
         setApiResp(true);
       }
     } catch (error) {

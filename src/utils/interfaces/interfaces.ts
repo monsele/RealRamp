@@ -26,4 +26,5 @@ export interface Auction {
   owner: string;
   completed: boolean;
   tokenAmount: string;
+  smartContractId: number;
 }

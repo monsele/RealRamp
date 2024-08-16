@@ -125,7 +125,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
       writeContract,
       navigate,
       apiResp
-    ]
+    ] 
   );
 
   useEffect(() => {
@@ -251,14 +251,14 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
           <div className="self-stretch flex flex-row items-start justify-start gap-[10px] mq450:flex-wrap">
             <div className="flex-1 flex flex-col items-start justify-start gap-[10px] min-w-[129px]">
               <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
-                <div className="self-stretch relative font-medium">
+                <div className="self-stretch relative font-medium text-black">
                   Property category
                 </div>
                 <div className="self-stretch h-[65px] flex flex-col items-start justify-start relative text-xs text-gray-200">
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full h-[65px] rounded-3xs bg-dimgray text-yellow-300 font-medium box-border flex items-center py-[25px] px-[15px] border-[1px] border-solid border-whitesmoke-200 appearance-none cursor-pointer"
+                    className="w-full h-[65px] rounded-3xs bg-dimgray text-black font-medium box-border flex items-center py-[25px] px-[15px] border-[1px] border-solid border-whitesmoke-200 appearance-none cursor-pointer"
                     style={{ fontFamily: "inherit" }}
                   >
                     <option value="0">Land</option>
@@ -275,14 +275,14 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                   </div>
                 </div>
               </div>
-              <div className="relative font-medium inline-block min-w-[67px]">
+              <div className="relative font-medium inline-block min-w-[67px] text-black">
                 No of Units
               </div>
               <div className="self-stretch rounded-3xs bg-dimgray flex flex-row items-center justify-start py-[23px] px-4 text-xs border-[1px] border-solid border-whitesmoke-200">
                 <input
                   type="text"
                   value={totalUnits}
-                  className="w-full bg-transparent border-none outline-none text-xs text-yellow-300 font-medium tracking-[0.01em] min-w-[21px]"
+                  className="w-full bg-transparent border-none outline-none text-xs text-black font-medium tracking-[0.01em] min-w-[21px]"
                   style={{ fontFamily: "inherit" }}
                   onChange={(e) => settotalUnits(e.target.value)}
                 />
@@ -290,25 +290,25 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
             </div>
             <div className="flex-1 flex flex-col items-start justify-start gap-[12px] min-w-[129px]">
               <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
-                <div className="self-stretch relative font-medium">{`Annual Yield `}</div>
+                <div className="self-stretch relative font-medium text-black">{`Annual Yield `}</div>
                 <div className="self-stretch flex flex-row items-start justify-start relative text-xs text-gray-200">
                   <div className="flex-1 rounded-3xs bg-dimgray flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
                     <input
                       type="text"
                       value={exYield}
                       onChange={(e) => setYield(Number(e.target.value))}
-                      className="w-full bg-transparent border-none outline-none text-xs text-yellow-300 font-medium tracking-[0.01em] min-w-[15px]"
+                      className="w-full bg-transparent border-none outline-none text-xs text-black font-medium tracking-[0.01em] min-w-[15px]"
                       style={{ fontFamily: "inherit" }}
                     />
                   </div>
                   <div className="h-[41px] w-px absolute !m-[0] top-[11px] right-[55px] box-border z-[1] border-r-[1px] border-solid border-darkslategray-300" />
-                  <div className="absolute !m-[0] top-[21px] right-[13px] text-base tracking-[0.01em] text-darkslategray-300 inline-block min-w-[11px] z-[1]">
+                  <div className="absolute !m-[0] top-[21px] right-[13px] text-base tracking-[0.01em] inline-block min-w-[11px] z-[1] text-black">
                     %
                   </div>
                 </div>
               </div>
-              <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
-                <div className="relative font-medium inline-block min-w-[83px]">
+              <div className="self-stretch flex flex-col items-start justify-start gap-[8px] ">
+                <div className="relative font-medium inline-block min-w-[83px] text-black">
                   Price per unit
                 </div>
                 <div className="self-stretch flex flex-row items-start justify-start relative text-xs text-gray-200">
@@ -317,12 +317,12 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
                       type="text"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      className="w-full bg-transparent border-none outline-none text-xs text-blue-300 font-medium tracking-[0.01em] min-w-[15px]"
+                      className="w-full bg-transparent border-none outline-none text-xs text-black font-medium tracking-[0.01em] min-w-[15px]"
                       style={{ fontFamily: "inherit" }}
                     />
                   </div>
                   <div className="h-[41px] w-px absolute !m-[0] top-[11px] right-[83px] box-border z-[1] border-r-[1px] border-solid border-darkslategray-300" />
-                  <div className="absolute !m-[0] top-[21px] right-[9px] text-base tracking-[0.01em] text-darkslategray-300 inline-block min-w-[43px] z-[1]">
+                  <div className="absolute !m-[0] top-[21px] right-[9px] text-base tracking-[0.01em]  inline-block min-w-[43px] z-[1] text-black">
                     ETH
                   </div>
                 </div>
@@ -334,7 +334,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
               <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
                 <div className="relative font-medium">Property Description</div>
                 <textarea
-                  className="bg-dimgray h-[122px] w-auto [outline:none] self-stretch rounded-3xs box-border flex flex-row items-start justify-start py-4 px-[15px] font-outfit text-xs text-yellow-300 border-[1px] border-solid border-whitesmoke-200"
+                  className="bg-dimgray h-[122px] w-auto [outline:none] self-stretch rounded-3xs box-border flex flex-row items-start justify-start py-4 px-[15px] font-outfit text-xs text-black border-[1px] border-solid border-whitesmoke-200"
                   placeholder="Give a brief description of the property"
                   rows={6}
                   value={desc}

@@ -4,10 +4,11 @@ import {
   useWaitForTransactionReceipt,
   useAccount,
 } from "wagmi";
+import { parseEther } from "viem";
 import { contractABI, contractAddress } from "../abi/EstatePool";
 import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { parseUnits } from "ethers";
+import { parseUnits, toBigInt,ethers } from "ethers";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Auction } from "../utils/interfaces/interfaces";
@@ -19,39 +20,45 @@ const BidScreen: FunctionComponent = () => {
   const [offer, setoffer] = useState<string>("");
   const { writeContract, data: hash } = useWriteContract();
   const { address } = useAccount();
-  const { auctionId } = useParams();
+  const { smartId } = useParams();
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
     useWaitForTransactionReceipt({
       hash,
     });
+   
+
   const { data: auction } = useQuery<Auction>({
     queryKey: ["getAuctionById"],
     queryFn: async () => {
       const axRresult = await axios.get<Auction>(
-        `https://on-real.fly.dev/auction/byId/${auctionId}`
+        `https://on-real.fly.dev/auction/bysId/${smartId}`
       );
-      setoffer("0.1");
+      setoffer(axRresult.data.initialBid);
+      console.log(auction);
       return axRresult.data;
     },
   });
 
   const navigate = useNavigate();
   const completeAuction = async () => {
+    console.log("Called Api here");
+    
     const axResponse = await axios.post(
-      `https://on-real.fly.dev/payBid?auctionId=${auctionId}`
+      `https://on-real.fly.dev/payBid?smartContractId=${smartId}`
     );
     console.log(axResponse);
   };
   const handleSubmit = useCallback( () => {
-    console.log(offer);
     
-     writeContract({
+     const result = writeContract({
       address: contractAddress,
       abi: contractABI,
       functionName: "PayBid",
-      args: [BigInt(Number(auctionId)), parseUnits(offer, "ether")],
-      value: parseUnits(offer, "ether"),
+      args: [toBigInt(Number(smartId)), parseUnits(offer,"ether")],
+      value: parseUnits(offer,"ether"),
     });
+    console.log(result);
+    
   }, [writeContract, offer, isTransactionLoading, isTransactionSuccess]);
 
   useEffect(() => {
@@ -61,9 +68,9 @@ const BidScreen: FunctionComponent = () => {
     if (isTransactionSuccess) {
       completeAuction();
       toast("Bid completed Successfully");
-      setTimeout(() => {
+     // setTimeout(() => {
         navigate(`/myassets/${address}`);
-      }, 3000);
+      //}, 3000);
     }
     if (!isTransactionSuccess && !isTransactionLoading) {
       toast("Bid failed: Make sure you pay the right amount");

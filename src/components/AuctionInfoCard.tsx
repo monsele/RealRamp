@@ -76,7 +76,7 @@ const AuctionInfoCard: FunctionComponent<AuctionInfoCardType> = ({
       <div className="flex flex-row items-start justify-start py-0 px-[78px] mq450:pl-5 mq450:pr-5 mq450:box-border">
         <div className="rounded-11xl flex flex-row items-start justify-start py-2 px-6">
           <Link
-            to={`/bid/${auctionId}`}
+            to={`/bid/${smartContractId}`}
             className="relative font-semibold text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] inline-block min-w-[57px]"
           >
             Join Bid

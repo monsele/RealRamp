@@ -25,17 +25,21 @@ const AuctionsContainer: FunctionComponent<AuctionsContainerType> = ({
     <section
       className={`w-[1108px] flex flex-row flex-wrap items-start justify-start gap-[57px_18.7px] min-h-[733px] max-w-full text-left text-base text-ntblack font-outfit ${className}`}
     >
-      {data?.map((item, index) => (
-        <AuctionInfoCard
-          key={index}
-          propertyTitle={item.nameOfAsset}
-          plots={item.tokenAmount}
-          price={Number(item.initialBid)}
-          propertyLocation={item.owner}
-          smartContractId={item.tokenId}
-          auctionId={item.id.toString()}
-        />
-      ))}
+      {data?.length == 0 ? (
+        <span>No Auctions</span>
+      ) : (
+        data?.map((item, index) => (
+          <AuctionInfoCard
+            key={index}
+            propertyTitle={item.nameOfAsset}
+            plots={item.tokenAmount}
+            price={Number(item.initialBid)}
+            propertyLocation={item.owner}
+            smartContractId={item.smartContractId}
+            auctionId={item.id.toString()}
+          />
+        ))
+      )}
     </section>
   );
 };
