@@ -181,51 +181,47 @@ contract EstatePool is ERC1155, ERC1155Holder, ERC1155Receiver {
 		uint256 tokenId,
 		uint256 amount
 	) external returns (bool, uint256) {
-		uint256 auctionId = GetAuctionCounter() + 1;
+		 auctionCounter = GetAuctionCounter() + 1;
 		_safeTransferFrom(msg.sender, address(this), tokenId, amount, "0x");
 
-		auction[auctionId] = AuctionData(
+		auction[auctionCounter] = AuctionData(
 			tokenId,
 			amount,
 			msg.sender,
-			auctionId,
+			auctionCounter,
 			false
 		);
 		auctions.push(
-			AuctionData(tokenId, amount, msg.sender, auctionId, false)
+			AuctionData(tokenId, amount, msg.sender, auctionCounter, false)
 		);
-		emit AuctionCreated(auctionId, msg.sender, tokenId, amount);
-		return (true, auctionId);
+		emit AuctionCreated(auctionCounter, msg.sender, tokenId, amount);
+		return (true, auctionCounter);
 	}
 
-	function PayBid(
-		uint256 amountToPay,
-		uint256 auctionId
-	) external payable returns (bool) {
-		require(msg.value >= amountToPay, "Invalid Amount");
-		AuctionData memory auctionData = auction[auctionId];
-		require(auctionData.completed == false, "Auction is already completed");
-		uint256 amountToSell = auctionData.AmountToSell;
-		address owner = auctionData.Owner;
-		uint256 tokenId = auctionData.TokenId;
-		(bool success, ) = owner.call{ value: msg.value }("");
-		require(success, "Eth transaction fails");
-		//transfer to the tokens to the bidder
-		_safeTransferFrom(
-			address(this),
-			msg.sender,
-			tokenId,
-			amountToSell,
-			"0x"
-		);
-		//Auction data should be removed from the mapping and from the auction list
-		//auction[auctionId] = auctionData;
-		auction[auctionId].completed = true;
-		AddTokenToUser(msg.sender, tokenId);
-		emit AuctionPaid(msg.sender, owner, auctionId, amountToPay);
-		return true;
-	}
+	function PayBid(uint256 auctionId,uint256 amount) external payable returns (bool) {
+    AuctionData storage auctionData = auction[auctionId];
+    require(!auctionData.completed, "Auction is already completed");
+     require(msg.value>=amount,"Invalid Amount");
+    address payable owner = payable(auctionData.Owner);
+    uint256 amountToSell = auctionData.AmountToSell;
+    uint256 tokenId = auctionData.TokenId;
 
+    // Transfer ETH to the owner
+    (bool success, ) = owner.call{value: msg.value}("");
+    require(success, "ETH transfer failed");
+
+    // Transfer tokens to the bidder
+    _safeTransferFrom(address(this), msg.sender, tokenId, amountToSell, "");
+
+    // Mark the auction as completed
+    auctionData.completed = true;
+
+    // Add token to user (make sure this function exists and works as expected)
+    AddTokenToUser(msg.sender, tokenId);
+
+    emit AuctionPaid(msg.sender, owner, auctionId, msg.value);
+    return true;
+}
 	function GetListedTokens() external view returns (TokenData[] memory) {
 		return ListedTokens;
 	}
@@ -258,9 +254,6 @@ contract EstatePool is ERC1155, ERC1155Holder, ERC1155Receiver {
 		return userTokenInfo;
 	}
 
-	// function GetAuctionStatus(uint256 auctionId)  returns (bool) {
-
-	// }
 	function AddTokenToUser(
 		address user,
 		uint256 tokenId
