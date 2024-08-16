@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
-import PublishNavBar from "../components/PublishNavBar";
-import PublishPropertyForm from "../components/PublishPropertyForm";
+import PublishNavBar from "../components/PublishNavBar.tsx";
+import PublishPropertyForm from "../components/PublishPropertyForm.tsx";
 
 const PublishProperty: FunctionComponent = () => {
   return (
