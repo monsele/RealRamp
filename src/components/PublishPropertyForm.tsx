@@ -332,7 +332,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
           <div className="self-stretch flex flex-row items-start justify-start pt-0 px-0 pb-[7px] box-border max-w-full">
             <div className="flex-1 flex flex-col items-start justify-start max-w-full">
               <div className="self-stretch flex flex-col items-start justify-start gap-[8px]">
-                <div className="relative font-medium">Property Description</div>
+                <div className="relative font-medium text-black">Property Description</div>
                 <textarea
                   className="bg-dimgray h-[122px] w-auto [outline:none] self-stretch rounded-3xs box-border flex flex-row items-start justify-start py-4 px-[15px] font-outfit text-xs text-black border-[1px] border-solid border-whitesmoke-200"
                   placeholder="Give a brief description of the property"
