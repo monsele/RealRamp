@@ -28,7 +28,6 @@ const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
     <div
       className={`w-[1195px] flex flex-col items-start justify-start gap-[13px] top-[0] z-[99] sticky max-w-full text-left text-sm text-gray-500 font-outfit ${className}`}
     >
-      <Toaster />
       <header className="self-stretch shadow-[2px_4px_30px_#e9eefd] rounded-42xl bg-white-base flex flex-row items-start justify-between p-3 box-border max-w-full gap-[20px] text-left text-5xl text-ntblack font-outfit">
         <div className="w-[297px] flex flex-col items-start justify-start pt-[3px] px-0 pb-0 box-border">
           <div className="self-stretch flex flex-row items-start justify-start py-0 px-4 gap-[42px] mq450:gap-[21px]">
@@ -48,15 +47,15 @@ const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
                 </a>
               </div>
             </div>
-            <div className="w-[122px] rounded-11xl bg-gray-200 box-border flex flex-row items-start justify-start py-[7px] px-[18px] gap-[4px] shrink-0 text-base border-[2px] border-solid border-base-blue">
-              <a className="[text-decoration:none] relative text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] inline-block min-w-[58px]">
-                Country
-              </a>
-              <img
-                className="h-5 w-5 relative object-contain min-h-[20px]"
-                alt=""
-                src="/vuesaxlineararrowleft@2x.png"
-              />
+            <div className="w-[122px] rounded-11xl bg-gray-200 box-border flex flex-row items-start justify-start py-[7px] px-[18px] gap-[4px] shrink-0 text-base border-[2px] border-solid border-base-blue hover:bg-blue-200">
+              <Link
+                to={`/overview/${address}`}
+                className="[text-decoration:none] relative inline-block min-w-[58px] hover:text-white"
+              >
+                <span className="text-transparent !bg-clip-text [background:linear-gradient(180deg,_#3a96ad,_#5a82fc)] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]">
+                  DashBoard
+                </span>
+              </Link>
             </div>
           </div>
         </div>
@@ -87,7 +86,18 @@ const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
                 List properties
               </Link>
             </div>
-            <ConnectButton label="Login" />
+            <div className="rounded-11xl flex flex-row items-start justify-start py-2.5 px-5">
+              <Link
+                to="/auctions"
+                className="[text-decoration:none] relative font-medium text-[inherit] inline-block min-w-[103px] whitespace-nowrap"
+              >
+                Auction
+              </Link>
+            </div>
+            <div className="rounded-11xl flex flex-row items-start justify-start py-2.5 px-5">
+              <ConnectButton label="Login" />
+            </div>
+
             {/* <button className="cursor-pointer py-[7px] px-[18px] bg-ntblack w-[83px] rounded-11xl box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
               <a className="[text-decoration:none] relative text-base font-outfit text-white-base text-left inline-block min-w-[43px]">
                 Log in

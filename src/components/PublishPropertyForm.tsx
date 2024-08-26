@@ -70,7 +70,7 @@ const PublishPropertyForm: FunctionComponent<PublishPropertyFormType> = ({
     if ((axResult.status = 201)) {
       toast.success("Asset Published Successfully")
       setTimeout(() => {
-        navigate(`/myAssets/${address}`);
+        navigate(`/properties`);
       }, 5000);
       return;
     }

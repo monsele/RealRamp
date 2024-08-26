@@ -101,18 +101,8 @@ const PublishNavBar: FunctionComponent<PublishNavBarType> = ({
               <div className="h-[28.5px] flex flex-col items-start justify-start pt-[3.5px] px-0 pb-0 box-border">
                 <div className="w-px h-[26px] relative bg-gray-500 box-border border-r-[1px] border-solid border-gray-500" />
               </div>
-              <div className="flex flex-col items-start justify-start pt-[4.5px] px-0 pb-0">
-                <a className="[text-decoration:none] relative text-[inherit] inline-block min-w-[95px] whitespace-nowrap">
-                  xdh...qhjdf
-                </a>
-              </div>
             </div>
           </div>
-          {/* <button className="cursor-pointer py-[7px] pr-4 pl-[19px] bg-ntblack w-[97px] rounded-11xl box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
-            <a className="[text-decoration:none] relative text-base font-outfit text-white-base text-left inline-block min-w-[58px]">
-              Log Out
-            </a>
-          </button> */}
           <ConnectButton label="Login" />
         </div>
       </div>

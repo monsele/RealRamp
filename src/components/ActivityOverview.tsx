@@ -1,6 +1,9 @@
 import { FunctionComponent } from "react";
-import {useQuery} from "@tanstack/react-query";
-import axios from 'axios'
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useDisconnect, useAccount } from "wagmi";
+import { Auction } from "../utils/interfaces/interfaces";
 export type ContentType = {
   className?: string;
 };
@@ -11,8 +14,24 @@ type Data = {
   temperatureF: number;
 };
 
+const ActivityOverview: FunctionComponent<ContentType> = ({
+  className = "",
+}) => {
+  const { address } = useAccount();
+  const { data } = useQuery({
+    queryKey: ["fore"],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `https://on-real.fly.dev/auction/${address}`
+      );
+      return data as Auction[];
+    },
+  });
+  console.log(data);
+  console.log(data?.length);
 
-const ActivityOverview: FunctionComponent<ContentType> = ({ className = "" }) => {
+  const { disconnect } = useDisconnect();
+  const { isConnected } = useAccount();
   return (
     <section
       className={`flex-1 flex flex-col items-start justify-start pt-[39px] px-0 pb-0 box-border min-w-[641px] max-w-full text-left text-5xl text-ntblack font-outfit mq450:min-w-full ${className}`}
@@ -78,8 +97,11 @@ const ActivityOverview: FunctionComponent<ContentType> = ({ className = "" }) =>
               </div>
               <div className="w-[97px] flex flex-col items-start justify-start pt-[3px] px-0 pb-0 box-border">
                 <button className="cursor-pointer py-[7px] pr-4 pl-[19px] bg-ntblack self-stretch rounded-11xl flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
-                  <a className="[text-decoration:none] relative text-base font-outfit text-white-base text-left inline-block min-w-[58px]">
-                    Log Out
+                  <a
+                    onClick={() => disconnect()}
+                    className="[text-decoration:none] relative text-base font-outfit text-white-base text-left inline-block min-w-[98px]"
+                  >
+                    {isConnected ? "LogOut" : "Not-On"}
                   </a>
                 </button>
               </div>
@@ -100,7 +122,7 @@ const ActivityOverview: FunctionComponent<ContentType> = ({ className = "" }) =>
                   $75,620
                 </div>
                 <div className="relative leading-[22px] font-medium inline-block min-w-[46px]">
-                  0.1ETH
+                  28.12 ETH
                 </div>
               </div>
               <div className="h-[69px] w-[54px] flex flex-col items-start justify-start pt-[15px] px-0 pb-0 box-border">
@@ -121,7 +143,7 @@ const ActivityOverview: FunctionComponent<ContentType> = ({ className = "" }) =>
                   Won Biddings
                 </div>
                 <div className="self-stretch relative text-5xl leading-[40px] font-semibold text-typography-1 mq700:text-lgi mq700:leading-[32px]">
-                  520
+                  {data?.filter((x) => x.completed).length}
                 </div>
               </div>
               <div className="h-[58px] w-[54px] flex flex-col items-start justify-start pt-1 px-0 pb-0 box-border">
@@ -142,7 +164,7 @@ const ActivityOverview: FunctionComponent<ContentType> = ({ className = "" }) =>
                   My Auction
                 </div>
                 <div className="self-stretch relative text-5xl leading-[40px] font-semibold text-typography-1 mq700:text-lgi mq700:leading-[32px]">
-                  32
+                  {data?.length}
                 </div>
               </div>
               <div className="flex flex-col items-start justify-start pt-1 px-0 pb-0">
@@ -163,7 +185,7 @@ const ActivityOverview: FunctionComponent<ContentType> = ({ className = "" }) =>
                     $7,879
                   </div>
                   <div className="relative leading-[22px] font-medium inline-block min-w-[67px]">
-                    0.005ETH
+                    2.93 ETH
                   </div>
                 </div>
                 <div className="h-[69px] w-[54px] flex flex-col items-start justify-start pt-[15px] px-0 pb-0 box-border">
@@ -197,191 +219,54 @@ const ActivityOverview: FunctionComponent<ContentType> = ({ className = "" }) =>
           </div>
           <div className="self-stretch h-[0.5px] relative box-border border-t-[0.5px] border-solid border-gray-600" />
           <div className="w-[945px] flex flex-col items-start justify-start gap-[24.8px] max-w-full text-base text-ntblack">
-            <div className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq925:flex-wrap">
-              <div className="w-[269px] flex flex-row items-start justify-start gap-[42px] mq700:gap-[21px]">
-                <div className="flex-1 flex flex-col items-start justify-start gap-[8px]">
-                  <div className="relative font-semibold inline-block min-w-[119px]">
-                    Lekki Court Yard
+            {data?.map((item, index) => (
+              <div className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq925:flex-wrap">
+                <div className="w-[269px] flex flex-row items-start justify-start gap-[42px] mq700:gap-[21px]">
+                  <div className="flex-1 flex flex-col items-start justify-start gap-[8px]">
+                    <div className="relative font-semibold inline-block min-w-[119px]">
+                      {item.nameOfAsset}
+                    </div>
+                    {/* <div className="self-stretch relative text-sm text-gray-700">
+                      Island , Lagos...
+                    </div> */}
                   </div>
-                  <div className="self-stretch relative text-sm text-gray-700">
-                    Island , Lagos...
-                  </div>
-                </div>
-                <div className="relative font-semibold inline-block min-w-[108px]">
-                  Adrone Homes
-                </div>
-              </div>
-              <div className="flex flex-row items-start justify-start gap-[73px] max-w-full mq450:flex-wrap mq450:gap-[36px] mq700:gap-[18px]">
-                <div className="w-[95px] flex flex-col items-start justify-start py-0 pr-5 pl-0 box-border">
-                  <div className="relative font-semibold inline-block min-w-[66px]">
-                    0.06ETH
+                  <div className="relative font-semibold inline-block min-w-[108px]">
+                    {item.owner.slice(0, 7)}
                   </div>
                 </div>
-                <div className="flex flex-col items-start justify-start py-0 pr-1 pl-0 text-seagreen">
-                  <div className="flex flex-row items-center justify-center gap-[12px]">
-                    <div className="flex flex-row items-start justify-start">
-                      <div className="flex flex-col items-start justify-start">
-                        <div className="relative font-semibold inline-block min-w-[74px]">
-                          0.062ETH
+                <div className="flex flex-row items-start justify-start gap-[73px] max-w-full mq450:flex-wrap mq450:gap-[36px] mq700:gap-[18px]">
+                  <div className="w-[95px] flex flex-col items-start justify-start py-0 pr-5 pl-0 box-border">
+                    <div className="relative font-semibold inline-block min-w-[66px]">
+                      {`${item.initialBid}`}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-start justify-start py-0 pr-1 pl-0 text-crimson">
+                    <div className="flex flex-row items-center justify-center gap-[12px]">
+                      <div className="flex flex-row items-start justify-start">
+                        <div className="flex flex-col items-start justify-start">
+                          <div className="relative font-semibold inline-block min-w-[74px]">
+                            {item.initialBid}
+                          </div>
                         </div>
                       </div>
+                      {/* <img
+                        className="h-6 w-6 relative"
+                        alt=""
+                        src="/vuesaxlineararrowup-1.svg"
+                      /> */}
                     </div>
-                    <input
-                      className="cursor-pointer m-0 h-6 w-6 relative"
-                      type="radio"
-                    />
                   </div>
-                </div>
-                <div className="w-[74px] relative font-semibold inline-block shrink-0">
-                  1/10
-                </div>
-                <button className="cursor-pointer py-[7px] px-[18px] bg-[transparent] w-[87px] rounded-11xl [background:linear-gradient(180deg,_rgba(58,_150,_173,_0.12),_rgba(90,_130,_252,_0.12))] box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-black hover:bg-darkslategray-300 hover:box-border hover:border-[2px] hover:border-solid hover:border-darkslategray-200">
-                  <div className="relative text-sm font-medium font-outfit text-gray-700 text-left inline-block min-w-[47px]">
-                    End bid
+                  <div className="w-[74px] relative font-semibold inline-block shrink-0">
+                    {item.completed.toString()}
                   </div>
-                </button>
-              </div>
-            </div>
-            <div className="w-[928.5px] h-[0.5px] relative box-border max-w-full border-t-[0.5px] border-solid border-gray-600" />
-            <div className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq925:flex-wrap">
-              <div className="w-[269px] flex flex-row items-start justify-start gap-[42px] mq700:gap-[21px]">
-                <div className="flex-1 flex flex-col items-start justify-start gap-[8px]">
-                  <div className="relative font-semibold inline-block min-w-[119px]">
-                    Lekki Court Yard
-                  </div>
-                  <div className="self-stretch relative text-sm text-gray-700">
-                    Island , Lagos...
-                  </div>
-                </div>
-                <div className="relative font-semibold inline-block min-w-[108px]">
-                  Adrone Homes
-                </div>
-              </div>
-              <div className="flex flex-row items-start justify-start gap-[73px] max-w-full mq450:flex-wrap mq450:gap-[36px] mq700:gap-[18px]">
-                <div className="w-[95px] flex flex-col items-start justify-start py-0 pr-5 pl-0 box-border">
-                  <div className="relative font-semibold inline-block min-w-[66px]">
-                    0.06ETH
-                  </div>
-                </div>
-                <div className="flex flex-col items-start justify-start py-0 pr-1 pl-0 text-crimson">
-                  <div className="flex flex-row items-center justify-center gap-[12px]">
-                    <div className="flex flex-row items-start justify-start">
-                      <div className="flex flex-col items-start justify-start">
-                        <div className="relative font-semibold inline-block min-w-[74px]">
-                          0.062ETH
-                        </div>
-                      </div>
+                  <button className="cursor-pointer py-[7px] px-[18px] bg-[transparent] w-[87px] rounded-11xl [background:linear-gradient(180deg,_rgba(58,_150,_173,_0.12),_rgba(90,_130,_252,_0.12))] box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-black hover:bg-darkslategray-300 hover:box-border hover:border-[2px] hover:border-solid hover:border-darkslategray-200">
+                    <div className="relative text-sm font-medium font-outfit text-gray-700 text-left inline-block min-w-[47px]">
+                      End bid
                     </div>
-                    <img
-                      className="h-6 w-6 relative"
-                      alt=""
-                      src="/vuesaxlineararrowup-1.svg"
-                    />
-                  </div>
-                </div>
-                <div className="w-[74px] relative font-semibold inline-block shrink-0">
-                  2/10
-                </div>
-                <button className="cursor-pointer py-[7px] px-[18px] bg-[transparent] w-[87px] rounded-11xl [background:linear-gradient(180deg,_rgba(58,_150,_173,_0.12),_rgba(90,_130,_252,_0.12))] box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-black hover:bg-darkslategray-300 hover:box-border hover:border-[2px] hover:border-solid hover:border-darkslategray-200">
-                  <div className="relative text-sm font-medium font-outfit text-gray-700 text-left inline-block min-w-[47px]">
-                    End bid
-                  </div>
-                </button>
-              </div>
-            </div>
-            <div className="w-[928.5px] h-[0.5px] relative box-border max-w-full border-t-[0.5px] border-solid border-gray-600" />
-            <div className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq925:flex-wrap">
-              <div className="w-[269px] flex flex-row items-start justify-start gap-[42px] mq700:gap-[21px]">
-                <div className="flex-1 flex flex-col items-start justify-start gap-[8px]">
-                  <div className="relative font-semibold inline-block min-w-[119px]">
-                    Lekki Court Yard
-                  </div>
-                  <div className="self-stretch relative text-sm text-gray-700">
-                    Island , Lagos...
-                  </div>
-                </div>
-                <div className="relative font-semibold inline-block min-w-[108px]">
-                  Adrone Homes
+                  </button>
                 </div>
               </div>
-              <div className="flex flex-row items-start justify-start gap-[73px] max-w-full mq450:flex-wrap mq450:gap-[36px] mq700:gap-[18px]">
-                <div className="w-[95px] flex flex-col items-start justify-start py-0 pr-5 pl-0 box-border">
-                  <div className="relative font-semibold inline-block min-w-[66px]">
-                    0.06ETH
-                  </div>
-                </div>
-                <div className="flex flex-col items-start justify-start py-0 pr-1 pl-0 text-seagreen">
-                  <div className="flex flex-row items-center justify-center gap-[12px]">
-                    <div className="flex flex-row items-start justify-start">
-                      <div className="flex flex-col items-start justify-start">
-                        <div className="relative font-semibold inline-block min-w-[74px]">
-                          0.062ETH
-                        </div>
-                      </div>
-                    </div>
-                    <input
-                      className="cursor-pointer m-0 h-6 w-6 relative"
-                      type="radio"
-                    />
-                  </div>
-                </div>
-                <div className="w-[74px] relative font-semibold inline-block shrink-0">
-                  1/10
-                </div>
-                <button className="cursor-pointer py-[7px] px-[18px] bg-[transparent] w-[87px] rounded-11xl [background:linear-gradient(180deg,_rgba(58,_150,_173,_0.12),_rgba(90,_130,_252,_0.12))] box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-black hover:bg-darkslategray-300 hover:box-border hover:border-[2px] hover:border-solid hover:border-darkslategray-200">
-                  <div className="relative text-sm font-medium font-outfit text-gray-700 text-left inline-block min-w-[47px]">
-                    End bid
-                  </div>
-                </button>
-              </div>
-            </div>
-            <div className="w-[928.5px] h-[0.5px] relative box-border max-w-full border-t-[0.5px] border-solid border-gray-600" />
-            <div className="self-stretch flex flex-row items-start justify-between max-w-full gap-[20px] mq925:flex-wrap">
-              <div className="w-[269px] flex flex-row items-start justify-start gap-[42px] mq700:gap-[21px]">
-                <div className="flex-1 flex flex-col items-start justify-start gap-[8px]">
-                  <div className="relative font-semibold inline-block min-w-[119px]">
-                    Lekki Court Yard
-                  </div>
-                  <div className="self-stretch relative text-sm text-gray-700">
-                    Island , Lagos...
-                  </div>
-                </div>
-                <div className="relative font-semibold inline-block min-w-[108px]">
-                  Adrone Homes
-                </div>
-              </div>
-              <div className="flex flex-row items-start justify-start gap-[73px] max-w-full mq450:flex-wrap mq450:gap-[36px] mq700:gap-[18px]">
-                <div className="w-[95px] flex flex-col items-start justify-start py-0 pr-5 pl-0 box-border">
-                  <div className="relative font-semibold inline-block min-w-[66px]">
-                    0.06ETH
-                  </div>
-                </div>
-                <div className="flex flex-col items-start justify-start py-0 pr-1 pl-0 text-crimson">
-                  <div className="flex flex-row items-center justify-center gap-[12px]">
-                    <div className="flex flex-row items-start justify-start">
-                      <div className="flex flex-col items-start justify-start">
-                        <div className="relative font-semibold inline-block min-w-[74px]">
-                          0.062ETH
-                        </div>
-                      </div>
-                    </div>
-                    <img
-                      className="h-6 w-6 relative"
-                      alt=""
-                      src="/vuesaxlineararrowup-3.svg"
-                    />
-                  </div>
-                </div>
-                <div className="w-[74px] relative font-semibold inline-block shrink-0">
-                  2/10
-                </div>
-                <button className="cursor-pointer py-[7px] px-[18px] bg-[transparent] w-[87px] rounded-11xl [background:linear-gradient(180deg,_rgba(58,_150,_173,_0.12),_rgba(90,_130,_252,_0.12))] box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-black hover:bg-darkslategray-300 hover:box-border hover:border-[2px] hover:border-solid hover:border-darkslategray-200">
-                  <div className="relative text-sm font-medium font-outfit text-gray-700 text-left inline-block min-w-[47px]">
-                    End bid
-                  </div>
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
