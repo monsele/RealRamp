@@ -18,6 +18,7 @@ const BidScreen: FunctionComponent = () => {
     // Please sync "Auction Screen/analytics" to the project
   }, []);
   const [offer, setoffer] = useState<string>("");
+  const [plots, setPlots] = useState<string>("");
   const { writeContract, data: hash } = useWriteContract();
   const { address } = useAccount();
   const { smartId } = useParams();
@@ -34,6 +35,7 @@ const BidScreen: FunctionComponent = () => {
         `https://on-real.fly.dev/auction/bysId/${smartId}`
       );
       setoffer(axRresult.data.initialBid);
+      setPlots(axRresult.data.tokenAmount);
       console.log(auction);
       return axRresult.data;
     },
@@ -340,10 +342,10 @@ const BidScreen: FunctionComponent = () => {
                 </div>
                 <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
                   <div className="self-stretch relative text-black dark:text-white">
-                    Acers
+                    Plots
                   </div>
                   <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-black dark:text-white mq450:text-lgi mq450:leading-[32px]">
-                    500
+                    {plots}
                   </div>
                 </div>
                 <div className="flex flex-col items-start justify-start pt-[8.5px] px-0 pb-0">
@@ -395,7 +397,7 @@ const BidScreen: FunctionComponent = () => {
                   Place bid
                 </div>
               </button>
-              <div className="self-stretch flex flex-col items-start justify-start gap-[10px]">
+              {/* <div className="self-stretch flex flex-col items-start justify-start gap-[10px]">
                 <div className="relative font-medium inline-block min-w-[74px]">
                   Winning bid
                 </div>
@@ -417,7 +419,7 @@ const BidScreen: FunctionComponent = () => {
                     75,00USD
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="self-stretch h-[0.6px] flex flex-row items-start justify-start py-0 px-4 box-border max-w-full">
                 <div className="self-stretch flex-1 relative box-border max-w-full border-t-[0.6px] border-solid border-gray-1200" />
               </div>
