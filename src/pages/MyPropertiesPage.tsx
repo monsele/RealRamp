@@ -237,7 +237,7 @@ const PropertyManagersProps: FunctionComponent = () => {
                       key={index}
                       title={item.propertyTitle}
                       LocationAddress={item.propertyLocation}
-                      Price={item.price.toString() + " naira_x"}
+                      Price={item.price.toString() + " ETH"}
                       Yield={item.annualYield + " %"}
                       Action="View Details"
                     />

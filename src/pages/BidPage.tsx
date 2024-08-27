@@ -383,7 +383,7 @@ const BidScreen: FunctionComponent = () => {
                     <div className="h-[41px] w-px relative box-border z-[1] border-r-[1px] border-solid border-darkslategray-300" />
                     <div className="flex flex-col items-start justify-start pt-2.5 px-0 pb-0">
                       <div className="relative tracking-[0.01em] inline-block min-w-[43px] z-[1]">
-                        USDT
+                        ETH
                       </div>
                     </div>
                   </div>

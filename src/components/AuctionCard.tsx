@@ -62,7 +62,7 @@ const AuctionCard: FunctionComponent<AuctionCardType> = ({
           <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
             <div className="relative font-medium inline-block min-w-[84px]">
               <span>{price.toString()}</span>
-              <span className="text-xs text-gray-500">MIN</span>
+              <span className="text-xs text-gray-500">ETH</span>
             </div>
           </div>
           <div className="h-[20.5px] w-[0.5px] relative box-border border-r-[0.5px] border-solid border-gray-600" />

@@ -317,7 +317,7 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                       </div>
                       <div className="h-[41px] w-px absolute !m-[0] top-[11px] right-[121px] box-border z-[1] border-r-[1px] border-solid border-darkslategray-200" />
                       <div className="absolute !m-[0] top-[21px] right-[47px] text-base tracking-[0.01em] text-darkslategray-200 inline-block min-w-[43px] z-[1]">
-                        USDT
+                        ETH
                       </div>
                     </div>
                   </div>
