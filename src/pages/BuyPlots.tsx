@@ -130,9 +130,9 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                           </div> */}
                         </div>
                       </div>
-                      <div className="relative font-medium text-center">
+                      {/* <div className="relative font-medium text-center">
                         Lekki Court Yard
-                      </div>
+                      </div> */}
                     </div>
                     <div className="flex flex-col items-start justify-start pt-[3px] px-0 pb-0 text-sm text-white-base">
                       <div className="[backdrop-filter:blur(4px)] rounded-[37px] bg-gray-700 flex flex-row items-start justify-start py-1.5 px-2.5 gap-[12px] z-[1]">
@@ -272,7 +272,7 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                       Unit value
                     </div>
                     <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 text-black whitespace-nowrap mq450:text-lgi mq450:leading-[32px]">
-                      ${data?.price}
+                      ETH{data?.price}
                     </div>
                   </div>
                 </div>
