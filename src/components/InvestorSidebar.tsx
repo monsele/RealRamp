@@ -19,21 +19,23 @@ const InvestorSidebar: FunctionComponent<FrameComponentType> = ({
     >
       <div className="flex flex-row items-start justify-start py-0 px-[70px] mq700:pl-5 mq700:pr-5 mq700:box-border">
         <div className="flex flex-col items-center justify-start gap-[10px]">
-          <img
-            className="w-[106px] h-[106px] relative rounded-[50%] object-cover"
-            loading="lazy"
-            alt=""
-            src="/ellipse-385@2x.png"
-          />
+          <Link to={"/"}>
+            <img
+              className="w-[106px] h-[106px] relative rounded-[50%] object-cover"
+              loading="lazy"
+              alt=""
+              src="/ellipse-385@2x.png"
+            />
+          </Link>
           <div className="flex flex-col items-center justify-start gap-[10px]">
             <h2 className="m-0 relative text-inherit font-semibold font-inherit mq700:text-3xl">
-              Danielkinq
+              {`${address?.slice(0, 7)}...`}
             </h2>
-            <button className="cursor-pointer [border:none] py-2.5 px-12 bg-goldenrod rounded-11xl flex flex-row items-center justify-center hover:bg-darkgoldenrod-200">
+            {/* <button className="cursor-pointer [border:none] py-2.5 px-12 bg-goldenrod rounded-11xl flex flex-row items-center justify-center hover:bg-darkgoldenrod-200">
               <div className="relative text-base font-medium font-outfit text-darkgoldenrod-100 text-left inline-block min-w-[59px]">
                 Investor
               </div>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

@@ -61,7 +61,7 @@ const AuctionCard: FunctionComponent<AuctionCardType> = ({
         <div className="h-5 flex flex-row items-start justify-start py-0 pr-7 pl-0 box-border gap-[19.8px] text-sm">
           <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
             <div className="relative font-medium inline-block min-w-[84px]">
-              <span>{price.toString()}</span>
+              {/* <span>{price.toString()}</span> */}
               <span className="text-xs text-gray-500">ETH</span>
             </div>
           </div>

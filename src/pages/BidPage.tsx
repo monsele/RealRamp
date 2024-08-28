@@ -166,9 +166,9 @@ const BidScreen: FunctionComponent = () => {
                   />
                   <div className="flex flex-col items-start justify-start gap-[10px]">
                     <div className="relative font-semibold inline-block min-w-[88px]">
-                      Danielkinq
+                      {`${address?.slice(0, 7)}...`}
                     </div>
-                    <div className="flex flex-row items-start justify-start gap-[10px]">
+                    {/* <div className="flex flex-row items-start justify-start gap-[10px]">
                       <button className="cursor-pointer [border:none] py-[11px] px-3.5 bg-goldenrod rounded-11xl flex flex-row items-center justify-center hover:bg-darkgoldenrod-200">
                         <div className="relative text-xs font-medium font-outfit text-darkgoldenrod-100 text-left inline-block min-w-[44px]">
                           Investor
@@ -184,13 +184,13 @@ const BidScreen: FunctionComponent = () => {
                           20 older investors
                         </div>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="self-stretch flex flex-col items-start justify-start gap-[14px] max-w-full">
-                  <div className="relative font-medium text-center">
+                  {/* <div className="relative font-medium text-center">
                     Lekki Court Yard
-                  </div>
+                  </div> */}
                   <div className="self-stretch flex flex-row items-start justify-center gap-[6px] max-w-full text-xs text-gray-900 mq750:flex-wrap">
                     <img
                       className="h-[17px] w-[17px] relative min-h-[17px]"
@@ -200,7 +200,7 @@ const BidScreen: FunctionComponent = () => {
                     />
                     <div className="flex-1 flex flex-col items-start justify-start pt-px px-0 pb-0 box-border min-w-[353px] max-w-full mq1050:min-w-full">
                       <div className="self-stretch relative">
-                        N0 51, ADEKOLA str Lekki way, Island Lagos
+                        Lekki,Lagos
                       </div>
                     </div>
                   </div>

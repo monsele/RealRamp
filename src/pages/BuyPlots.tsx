@@ -109,9 +109,9 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                         />
                         <div className="flex-1 flex flex-col items-start justify-start gap-[10px] min-w-[172px]">
                           <div className="relative font-semibold inline-block min-w-[88px]">
-                            Danielkinq
+                            {`${address?.slice(0, 7)}...`}
                           </div>
-                          <div className="self-stretch flex flex-row items-start justify-start gap-[10px] text-xs text-darkcyan-100 mq450:flex-wrap">
+                          {/* <div className="self-stretch flex flex-row items-start justify-start gap-[10px] text-xs text-darkcyan-100 mq450:flex-wrap">
                             <div className="rounded-11xl bg-darkcyan-200 flex flex-row items-center justify-center py-[11px] px-3.5 whitespace-nowrap">
                               <div className="relative font-medium inline-block min-w-[100px]">
                                 Property Manager
@@ -127,7 +127,7 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                                 200 Investors
                               </div>
                             </button>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                       <div className="relative font-medium text-center">
@@ -309,8 +309,8 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                       <div className="flex-1 rounded-3xs bg-dimgray-200 flex flex-row items-start justify-start py-[23px] px-4 border-[1px] border-solid border-whitesmoke-200">
                         <input
                           type="text"
-                         // defaultValue={plotAmount * price}
-                          value={plotAmount*price}
+                          // defaultValue={plotAmount * price}
+                          value={plotAmount * price}
                           //onChange={() => setPriceSize(plotAmount * price)}
                           className="w-full bg-transparent border-none outline-none text-black text-xs tracking-[0.01em]"
                         />

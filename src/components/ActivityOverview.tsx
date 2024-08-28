@@ -201,7 +201,7 @@ const ActivityOverview: FunctionComponent<ContentType> = ({
                 </div>
               </div>
               <div className="self-stretch relative text-base font-medium font-outfit text-black">
-                Your Current bidd
+                Your Current bid
               </div>
             </div>
           </div>
@@ -245,7 +245,7 @@ const ActivityOverview: FunctionComponent<ContentType> = ({
                       <div className="flex flex-row items-start justify-start">
                         <div className="flex flex-col items-start justify-start">
                           <div className="relative font-semibold inline-block min-w-[74px]">
-                            {item.initialBid}
+                            {item.tokenAmount}
                           </div>
                         </div>
                       </div>
