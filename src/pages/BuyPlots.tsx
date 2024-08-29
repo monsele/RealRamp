@@ -141,11 +141,11 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                           alt=""
                           src="/vuesaxlinearheart.svg"
                         />
-                        <div className="flex flex-col items-start justify-start pt-[3px] px-0 pb-0">
+                        {/* <div className="flex flex-col items-start justify-start pt-[3px] px-0 pb-0">
                           <a className="[text-decoration:none] relative font-medium text-[inherit] inline-block min-w-[50px]">
                             200 likes
                           </a>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
