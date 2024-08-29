@@ -247,10 +247,10 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                 <div className="self-stretch flex flex-row items-start justify-start gap-[15.7px] text-gray-1000 mq450:flex-wrap">
                   <div className="flex-1 flex flex-col items-start justify-start gap-[4px] min-w-[73px]">
                     <div className="self-stretch relative text-black">
-                      Total value
+                      Currency
                     </div>
                     <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 text-black whitespace-nowrap mq450:text-lgi mq450:leading-[32px]">
-                      $75,620
+                      ETH
                     </div>
                   </div>
                   <div className="flex flex-col items-start justify-start pt-[8.5px] px-0 pb-0">
@@ -272,7 +272,7 @@ const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } =
                       Unit value
                     </div>
                     <div className="self-stretch relative text-5xl leading-[40px] font-semibold font-title-price text-typography-1 text-black whitespace-nowrap mq450:text-lgi mq450:leading-[32px]">
-                      ETH{data?.price}
+                    {data?.price}
                     </div>
                   </div>
                 </div>
