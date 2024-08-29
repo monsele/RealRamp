@@ -13,8 +13,8 @@ const PropertyManagersProps: FunctionComponent = () => {
     // Please sync "Publish Property" to the project
   }, []);
   const { address } = useAccount();
-  const { data } = useQuery({
-    queryKey: ["fore"],
+  const { data, isLoading } = useQuery({
+    queryKey: ["propertyByOwner"],
     queryFn: async () => {
       const { data } = await axios.get(
         `https://on-real.fly.dev/PropertiesByOwner/${address}`
@@ -23,6 +23,9 @@ const PropertyManagersProps: FunctionComponent = () => {
     },
   });
   console.log(data);
+   if (isLoading) {
+     return <div>Loading...</div>;
+   }
   return (
     <div className="w-full h-[1183px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start gap-[325px] leading-[normal] tracking-[normal] text-left text-5xl font-outfit lg:h-auto lg:gap-[162px] mq450:gap-[41px] mq750:gap-[81px]">
       <main className="w-[1382px] flex flex-row flex-wrap items-start justify-start py-0 pr-5 pl-0 box-border gap-[45px] shrink-0 max-w-full text-left text-5xl font-outfit mq750:gap-[22px]">

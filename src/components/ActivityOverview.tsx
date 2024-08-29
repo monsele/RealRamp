@@ -18,7 +18,7 @@ const ActivityOverview: FunctionComponent<ContentType> = ({
   className = "",
 }) => {
   const { address } = useAccount();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["fore"],
     queryFn: async () => {
       const { data } = await axios.get(
@@ -32,6 +32,9 @@ const ActivityOverview: FunctionComponent<ContentType> = ({
 
   const { disconnect } = useDisconnect();
   const { isConnected } = useAccount();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <section
       className={`flex-1 flex flex-col items-start justify-start pt-[39px] px-0 pb-0 box-border min-w-[641px] max-w-full text-left text-5xl text-ntblack font-outfit mq450:min-w-full ${className}`}

@@ -10,9 +10,9 @@ const MyAssetPage: FunctionComponent = () => {
   const onListButtonClick = useCallback(() => {
     // Please sync "Publish Property" to the project
   }, []);
-  //const [properties, setproperties] = useState<Data[] | undefined>(undefined);
-  const { address } = useAccount();
-   const { isLoading, data: userTokens } = useReadContract({
+  const { address,  } = useAccount();
+
+  const { isLoading, data: userTokens } = useReadContract({
      abi: contractABI,
      address: contractAddress,
      functionName: "GetUserTokensData",
@@ -20,22 +20,9 @@ const MyAssetPage: FunctionComponent = () => {
    });
 
  if (isLoading) {
-  console.log("loading");
+   return <div>Loading...</div>;
  }
-console.log(userTokens);
 
- 
-   
-  //  useEffect(() => {
-  //    if (isLoading) {
-  //     return console.log("Loading");
-  //    }   
-  //    console.log(resultd);
-
-  //  }, [isLoading])
-   
-   
-   
   return (
     <div className="w-full h-[1183px] relative bg-gray-100 overflow-hidden flex flex-col items-start justify-start gap-[325px] leading-[normal] tracking-[normal] text-left text-5xl font-outfit lg:h-auto lg:gap-[162px] mq450:gap-[41px] mq750:gap-[81px]">
       <Toaster/>
