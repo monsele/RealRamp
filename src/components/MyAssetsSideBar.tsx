@@ -11,7 +11,7 @@ const MyAssetSideBarSidebar: FunctionComponent<MyAssetSideBarSidebarType> = ({
   const {address} = useAccount();
   return (
     <div
-      className={`self-stretch flex flex-col items-end justify-start gap-[25px] text-left text-9xl text-black font-outfit ${className}`}
+      className={`sticky top-0 h-screen overflow-y-auto self-stretch flex flex-col items-end justify-start gap-[25px] text-left text-9xl text-black font-outfit ${className}`}
     >
       <div className="flex flex-row items-start justify-end py-0 px-[37px]">
         <div className="flex flex-col items-center justify-start gap-[10px]">
