@@ -74,7 +74,7 @@ const BidScreen: FunctionComponent = () => {
       //}, 3000);
     }
     if (!isTransactionSuccess && !isTransactionLoading) {
-      toast("Bid failed: Make sure you pay the right amount");
+      toast("Make sure you pay the right amount");
     }
   }, [isTransactionLoading, isTransactionSuccess]);
 
