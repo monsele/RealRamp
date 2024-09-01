@@ -4,6 +4,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
+
 contract EstatePool is ERC1155, ERC1155Holder, ERC1155Receiver {
 	//////////////////
 	/////ERRORS/////
@@ -197,10 +198,11 @@ contract EstatePool is ERC1155, ERC1155Holder, ERC1155Receiver {
 		return (true, auctionCounter);
 	}
 
-	function PayBid(uint256 auctionId,uint256 amount) external payable returns (bool) {
+	function PayBid(uint256 auctionId) external payable returns (bool) {
     AuctionData storage auctionData = auction[auctionId];
     require(!auctionData.completed, "Auction is already completed");
-     require(msg.value>=amount,"Invalid Amount");
+    require(msg.value >= auctionData.AmountToSell, "Invalid Amount");
+
     address payable owner = payable(auctionData.Owner);
     uint256 amountToSell = auctionData.AmountToSell;
     uint256 tokenId = auctionData.TokenId;
