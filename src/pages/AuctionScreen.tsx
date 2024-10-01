@@ -11,7 +11,7 @@ const AuctionScreen: FunctionComponent = () => {
       <main className="self-stretch flex flex-row items-start justify-start py-0 pr-[29px] pl-[30px] box-border max-w-full shrink-0">
         <section className="flex-1 flex flex-col items-start justify-start gap-[30px] shrink-0 max-w-full">
           {/* <FrameComponent /> */}
-          <PropertyInfoContainer tokenId={tokenId} nameOfAsset={name} />
+          <PropertyInfoContainer tokenId={tokenId ?? ''} nameOfAsset={name ?? ''} />
         </section>
       </main>
       {/* <div className="w-[106px] h-9 relative [backdrop-filter:blur(4px)] rounded-[37px] bg-gray-1300 hidden whitespace-nowrap">

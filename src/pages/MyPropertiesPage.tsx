@@ -1,5 +1,5 @@
 import { FunctionComponent, useCallback, useState } from "react";
-import OverviewSidebar from "../components/OverviewSidebar";
+import OverviewSidebar from "../components/SidebarResponsive";
 import TabCard from "../components/TabCard";
 import PropCard from "../components/PropCard";
 import { useQuery } from "@tanstack/react-query";

@@ -4,7 +4,6 @@ import {
   useWriteContract,
   useAccount,
   useReadContract
-  //useTransactionReceipt,
 } from "wagmi";
 
 import { contractABI, contractAddress } from "../abi/EstatePool";
@@ -26,6 +25,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
   const [amount, setAmount] = useState("");
   const [bidAmount, setbidAmount] = useState("");
   const [apiResp, setApiResp] = useState(false);
+
   
   const { writeContract, data: hash } = useWriteContract();
   const { address } = useAccount();

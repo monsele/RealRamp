@@ -25,11 +25,7 @@ const OverviewSidebar: FunctionComponent<OverviewSidebarType> = ({
             <h1 className="m-0 relative text-inherit font-semibold font-inherit mq450:text-3xl">
               {`${address?.slice(0, 7)}...`}
             </h1>
-            {/* <button className="cursor-pointer [border:none] py-2.5 px-12 bg-darkcyan-200 rounded-11xl flex flex-row items-center justify-center whitespace-nowrap hover:bg-darkturquoise">
-              <div className="relative text-base font-medium font-outfit text-darkcyan-100 text-left">
-                Property Manager
-              </div>
-            </button> */}
+      
           </div>
         </div>
       </div>

@@ -19,6 +19,7 @@ type Props = { children: ReactNode };
 
 const queryClient = new QueryClient();
 
+
 const wallets = [
   {
     groupName: "Recommended Wallet",
@@ -31,7 +32,8 @@ const wallets = [
 ];
 
 const wagmiConfig = getDefaultConfig({
-  appName: "onchainkit",
+
+  appName: "Packets",
   wallets,
   projectId: "1b8a76a4b6f972f3465c27dc3bb483cd",
   chains: [baseSepolia],
