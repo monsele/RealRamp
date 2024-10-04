@@ -15,6 +15,8 @@ import MyPropertiesPage from "./pages/MyPropertiesPage";
 import BuyPlots from "./pages/BuyPlots";  
 import MyAssetPage from "./pages/MyAssetPage";
 import AuctionPage from "./pages/AuctionPage";
+import HomePage from "./pages/HomePage";
+import Web3AuthComponent from "./pages/Web3AuthComponent";
 
 function App() {
   const action = useNavigationType();
@@ -56,6 +58,7 @@ function App() {
     <OnchainProviders>
       <Routes>
         <Route path="/" element={<FullExplore />} />
+        <Route path="/home" element={<Web3AuthComponent />} />
         <Route path="/overview/:address" element={<InvestorOverview />} />
         <Route path="/publish" element={<PublishProperty />} />
         <Route path="/auction/:tokenId/:name" element={<AuctionScreen />} />

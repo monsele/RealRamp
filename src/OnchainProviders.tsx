@@ -55,8 +55,8 @@ function OnchainProviders({ children }: Props) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <Web3AuthProvider config={web3AuthContextConfig}>
-          <WalletServicesProvider context={Web3AuthInnerContext}>
+        {/* <Web3AuthProvider config={web3AuthContextConfig}> */}
+          {/* <WalletServicesProvider context={Web3AuthInnerContext}> */}
             <OnchainKitProvider
               apiKey={process.env.PUBLIC_ONCHAINKIT_API_KEY}
               chain={baseSepolia}
@@ -65,8 +65,8 @@ function OnchainProviders({ children }: Props) {
                 {children}
               </RainbowKitProvider>
             </OnchainKitProvider>
-          </WalletServicesProvider>
-        </Web3AuthProvider>
+          {/* </WalletServicesProvider> */}
+        {/* </Web3AuthProvider> */}
       </QueryClientProvider>
     </WagmiProvider>
   );
