@@ -1,3 +1,5 @@
+ import { Web3Auth } from "@web3auth/modal";
+import { PublicClient, WalletClient } from "viem";
  export interface PropertyType {
     id: number;
     propertyTitle: string;
@@ -27,4 +29,19 @@ export interface Auction {
   completed: boolean;
   tokenAmount: string;
   smartContractId: number;
+}
+export interface IWeb3Context {
+  web3auth: Web3Auth | null;
+  publicClient: PublicClient | null;
+  walletClient: WalletClient | null;
+  address: string;
+  loading: boolean;
+  error: Error | null;
+  login: () => Promise<void>;
+  logout: () => Promise<void>;
+  initializeWeb3Auth: () => Promise<void>;
+}
+
+export interface Web3ProviderProps {
+  children: React.ReactNode;
 }

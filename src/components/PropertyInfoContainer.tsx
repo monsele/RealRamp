@@ -42,7 +42,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
        args: [`0x${address?.slice(2)}`, BigInt(tokenId)],
      });
      console.log(Number(result.data));
-  const webprovider = new ethers.WebSocketProvider(
+    const webprovider = new ethers.WebSocketProvider(
     "wss://base-sepolia.g.alchemy.com/v2/Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI"
   );
   // const webprovider = new ethers.WebSocketProvider(
@@ -106,6 +106,7 @@ const PropertyInfoContainer: FunctionComponent<PropertyInfoContainerType> = ({
           navigate(`/overview/${address}`);
         }
       }, [apiResp]);
+      
   useEffect(() => {
     if (isTransactionLoading) {
       getEvent();

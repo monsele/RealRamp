@@ -19,7 +19,7 @@ import {
   Web3AuthProvider,
 } from "@web3auth/modal-react-hooks";
 import { WalletServicesProvider } from "@web3auth/wallet-services-plugin-react-hooks";
-import web3AuthContextConfig from "./utils/services/web3authContext";
+import { Web3Provider } from "./utils/services/authContext";
 
 type Props = { children: ReactNode };
 
@@ -37,7 +37,7 @@ const wallets = [
 ];
 
 const wagmiConfig = getDefaultConfig({
-  appName: "onchainkit",
+  appName: "Packets",
   wallets,
   projectId: "1b8a76a4b6f972f3465c27dc3bb483cd",
   chains: [baseSepolia],
@@ -45,7 +45,7 @@ const wagmiConfig = getDefaultConfig({
   syncConnectedChain: true,
   transports: {
     [baseSepolia.id]: http(
-      `https://base-sepolia.g.alchemy.com/v2/Kg-QkKBYxywIbXW70OhuxDpOde_Z-YlI`
+      `https://base-sepolia.g.alchemy.com/v2/rEYE-8dcbVFNNd5dlyvS1tLywyh-fOGf`
     ),
   },
   // If your dApp uses server side rendering (SSR)
@@ -55,18 +55,16 @@ function OnchainProviders({ children }: Props) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        {/* <Web3AuthProvider config={web3AuthContextConfig}> */}
-          {/* <WalletServicesProvider context={Web3AuthInnerContext}> */}
-            <OnchainKitProvider
-              apiKey={process.env.PUBLIC_ONCHAINKIT_API_KEY}
-              chain={baseSepolia}
-            >
-              <RainbowKitProvider modalSize="compact">
-                {children}
-              </RainbowKitProvider>
-            </OnchainKitProvider>
-          {/* </WalletServicesProvider> */}
-        {/* </Web3AuthProvider> */}
+        <Web3Provider>
+          <OnchainKitProvider
+            apiKey={process.env.PUBLIC_ONCHAINKIT_API_KEY}
+            chain={baseSepolia}
+          >
+            <RainbowKitProvider modalSize="compact">
+              {children}
+            </RainbowKitProvider>
+          </OnchainKitProvider>
+        </Web3Provider>
       </QueryClientProvider>
     </WagmiProvider>
   );

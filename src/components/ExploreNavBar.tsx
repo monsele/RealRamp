@@ -1,9 +1,11 @@
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { WalletComponents } from "./Login";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+//import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import {useWeb3} from '../utils/services/authContext'
+import ConnectButton from './ConnectButton'
 export type ExploreNavBarType = {
   className?: string;
 };
@@ -95,7 +97,7 @@ const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
               </Link>
             </div>
             <div className="rounded-11xl flex flex-row items-start justify-start py-2.5 px-5">
-              <ConnectButton label="Login" />
+              <ConnectButton />
             </div>
 
             {/* <button className="cursor-pointer py-[7px] px-[18px] bg-ntblack w-[83px] rounded-11xl box-border flex flex-row items-start justify-start whitespace-nowrap border-[2px] border-solid border-base-blue hover:bg-darkslategray-100 hover:box-border hover:border-[2px] hover:border-solid hover:border-skyblue">
