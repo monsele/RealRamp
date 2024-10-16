@@ -15,7 +15,7 @@ import {
   type WalletClient,
   type Chain
 } from 'viem';
-import { base } from 'viem/chains';
+import { baseSepolia, sepolia} from 'viem/chains';
 import { chain } from '../config/chain';
 import { IWeb3Context, Web3ProviderProps } from '../interfaces/interfaces';
 
@@ -33,12 +33,12 @@ export function Web3Provider({ children }: { children: ReactNode }) {
     try {
       const publicClient = createPublicClient({
         transport: custom(provider),
-        chain: base
+        chain: baseSepolia,
       }) as PublicClient;
 
       const walletClient = createWalletClient({
         transport: custom(provider),
-        chain: base
+        chain: baseSepolia,
       });
 
       const [address] = await walletClient.getAddresses();
@@ -69,9 +69,9 @@ export function Web3Provider({ children }: { children: ReactNode }) {
       const web3authInstance = new Web3Auth(web3AuthOptions);
       const adapters = await getInjectedAdapters({ options: web3AuthOptions });
       
-      adapters.forEach((adapter) => {
-        web3authInstance.configureAdapter(adapter);
-      });
+      // adapters.forEach((adapter) => {
+      //   web3authInstance.configureAdapter(adapter);
+      // });
 
       await web3authInstance.initModal();
       console.log("Got initailized")
@@ -81,6 +81,7 @@ export function Web3Provider({ children }: { children: ReactNode }) {
         console.log("Got Viem");
         await setupViem(web3authInstance.provider);
       }
+        
     } catch (error) {
       console.error("Error initializing Web3Auth:", error);
       setError(error instanceof Error ? error : new Error('Unknown error during initialization'));
@@ -95,6 +96,10 @@ export function Web3Provider({ children }: { children: ReactNode }) {
     }
     try {
       const web3authProvider = await web3auth.connect();
+      const privateKey  = await web3authProvider?.request({
+        method: "eth_private_key",
+      }) as string;
+      console.log(privateKey);
       await setupViem(web3authProvider);
     } catch (error) {
       console.error("Error logging in:", error);

@@ -24,6 +24,7 @@ const ExploreNavBar: FunctionComponent<ExploreNavBarType> = ({
       console.log(address);
       return;
     }
+    
   }, [isConnected]);
 
   return (

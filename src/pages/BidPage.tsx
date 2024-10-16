@@ -14,9 +14,7 @@ import axios from "axios";
 import { Auction } from "../utils/interfaces/interfaces";
 
 const BidScreen: FunctionComponent = () => {
-  const onFrameContainerClick1 = useCallback(() => {
-    // Please sync "Auction Screen/analytics" to the project
-  }, []);
+
   const [offer, setoffer] = useState<string>("");
   const [plots, setPlots] = useState<string>("");
   const { writeContract, data: hash } = useWriteContract();
@@ -314,7 +312,6 @@ const BidScreen: FunctionComponent = () => {
                     </button>
                     <div
                       className="flex-1 rounded-11xl flex flex-row items-center justify-center py-2.5 px-5 box-border min-w-[65px] cursor-pointer"
-                      onClick={onFrameContainerClick1}
                     >
                       <div className="relative font-medium inline-block min-w-[58px]">
                         Analytics

@@ -39,30 +39,30 @@ const ContractInteraction = () => {
     }
   };
 
-//   const writeContract = async (): Promise<void> => {
-//     if (!walletClient || !address || !publicClient) return;
+  const writeContract = async (): Promise<void> => {
+    if (!walletClient || !address || !publicClient) return;
 
-//     try {
-//       const { request } = await publicClient.simulateContract({
-//         account: address as Address,
-//         address: contractAddress,
-//         abi,
-//         functionName: "mint",
-//         args: ["0xRecipientAddress" as Address, 100n],
-//       });
+    try {
+      const { request } = await publicClient.simulateContract({
+        account: address as Address,
+        address: contractAddress,
+        abi,
+        functionName: "CreateAsset",
+        args: ["Test Viem", BigInt(100), BigInt(100), Number(1)],
+      });
 
-//       const hash = await walletClient.writeContract(request);
-//       console.log("Transaction hash:", hash);
-//     } catch (error) {
-//       const contractError = error as ContractCallError;
-//       console.error("Error writing to contract:", contractError.message);
-//     }
-//   };
+      const hash = await walletClient.writeContract(request);
+      console.log("Transaction hash:", hash);
+    } catch (error) {
+      const contractError = error as ContractCallError;
+      console.error("Error writing to contract:", contractError.message);
+    }
+  };
 
   return (
     <div>
       <button onClick={readContract}>Read Contract</button>
-      {/* <button onClick={writeContract}>Write Contract</button> */}
+      <button onClick={writeContract}>Write Contract</button>
     </div>
   );
 };
